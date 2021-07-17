@@ -40,13 +40,45 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const float dt = 1 / 60.0f;
+	const float dTheta = PI / 2;
+
+	if ( wnd.kbd.KeyIsPressed('Q') )
+	{
+		theta_z += dt * dTheta;
+	}
+	else if ( wnd.kbd.KeyIsPressed('E') )
+	{
+		theta_z -= dt * dTheta;
+	}
+	
+	if ( wnd.kbd.KeyIsPressed('W') )
+	{
+		theta_x += dt * dTheta;
+	}
+	else if ( wnd.kbd.KeyIsPressed('S') )
+	{
+		theta_x -= dt * dTheta;
+	}
+	
+	if ( wnd.kbd.KeyIsPressed('A') )
+	{
+		theta_y += dt * dTheta;
+	}
+	else if ( wnd.kbd.KeyIsPressed('D') )
+	{
+		theta_y -= dt * dTheta;
+	}
 }
 
 void Game::ComposeFrame()
 {
 	auto lines = c.GetLineList();
+	Mat3 m = Mat3::RotationX( theta_x ) * Mat3::RotationY( theta_y ) * Mat3::RotationZ( theta_z );
+
 	for ( auto& v : lines.vertices )
 	{
+		v *= m;
 		ct.Transform( v );
 	}
 	for ( auto i = lines.indices.cbegin(), e = lines.indices.cend(); i != e; std::advance(i, 2) )
