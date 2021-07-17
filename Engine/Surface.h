@@ -50,7 +50,7 @@ public:
 		:
 		Surface( width,height,width )
 	{}
-	Surface( Surface&& source )
+	Surface( Surface&& source ) noexcept
 		:
 		pBuffer( std::move( source.pBuffer ) ),
 		width( source.width ),
@@ -58,7 +58,7 @@ public:
 		pitch( source.pitch )
 	{}
 	Surface( Surface& ) = delete;
-	Surface& operator=( Surface&& donor )
+	Surface& operator=( Surface&& donor ) noexcept
 	{
 		width = donor.width;
 		height = donor.height;

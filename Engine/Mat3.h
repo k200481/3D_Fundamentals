@@ -55,8 +55,8 @@ public:
 	}
 	static _Mat3 RotationZ( T theta )
 	{
-		const T cosTheta = cos( theta );
-		const T sinTheta = sin( theta );
+		const T cosTheta = (T)cos( theta );
+		const T sinTheta = (T)sin( theta );
 		_Mat3 r = {
 			 cosTheta,	sinTheta, (T)0.0,
 			-sinTheta,	cosTheta, (T)0.0,
@@ -66,8 +66,8 @@ public:
 	}
 	static _Mat3 RotationY( T theta )
 	{
-		const T cosTheta = cos( theta );
-		const T sinTheta = sin( theta );
+		const T cosTheta = (T)cos( theta );
+		const T sinTheta = (T)sin( theta );
 		_Mat3 r = {
 			cosTheta, (T)0.0, -sinTheta,
 			(T)0.0,	  (T)1.0, (T)0.0,
@@ -77,8 +77,8 @@ public:
 	}
 	static _Mat3 RotationX( T theta )
 	{
-		const T cosTheta = cos( theta );
-		const T sinTheta = sin( theta );
+		const T cosTheta = (T)cos( theta );
+		const T sinTheta = (T)sin( theta );
 		_Mat3 r = {
 			(T)1.0,  (T)0.0,	(T)0.0,
 			(T)0.0,  cosTheta,  sinTheta,
