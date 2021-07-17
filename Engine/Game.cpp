@@ -69,6 +69,9 @@ void Game::UpdateModel()
 	{
 		theta_y -= dt * dTheta;
 	}
+	theta_x = wrap_angle( theta_x );
+	theta_y = wrap_angle( theta_y );
+	theta_z = wrap_angle( theta_z );
 }
 
 void Game::ComposeFrame()
