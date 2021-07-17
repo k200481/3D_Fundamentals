@@ -20,11 +20,13 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "Mat3.h"
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	c( 1.0f )
 {
 }
 
@@ -42,4 +44,13 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	auto lines = c.GetLineList();
+	for ( auto& v : lines.vertices )
+	{
+		ct.Transform( v );
+	}
+	for ( auto i = lines.indices.cbegin(), e = lines.indices.cend(); i != e; std::advance(i, 2) )
+	{
+		gfx.DrawLine( lines.vertices[*i], lines.vertices[*std::next(i)], Colors::White );
+	}
 }
