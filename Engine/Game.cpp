@@ -85,17 +85,27 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	auto lines = c.GetLineList();
-	Mat3 m = Mat3::RotationX( theta_x ) * Mat3::RotationY( theta_y ) * Mat3::RotationZ( theta_z );
+	std::vector<Color> colors = {
+		Colors::Yellow,
+		Colors::Red,
+		Colors::Blue,
+		Colors::White,
+		Colors::Green,
+		Colors::Cyan
+	};
 
-	for ( auto& v : lines.vertices )
+	auto triangles = c.GetTriangles();
+	const Mat3 m = Mat3::RotationX( theta_x ) * Mat3::RotationY( theta_y ) * Mat3::RotationZ( theta_z );
+
+	for ( auto& v : triangles.vertices )
 	{
 		v *= m;
 		v += { 0.0f,0.0f,2.0f + zOffset };
 		ct.Transform( v );
 	}
-	for ( auto i = lines.indices.cbegin(), e = lines.indices.cend(); i != e; std::advance(i, 2) )
+	for ( auto i = triangles.indices.cbegin(), e = triangles.indices.cend(); i != e; std::advance(i, 3) )
 	{
-		gfx.DrawLine( lines.vertices[*i], lines.vertices[*std::next(i)], Colors::White );
+		int index = ((int)std::distance( i, e ) - 1) / 6;
+		gfx.DrawTriangle( triangles.vertices[*i], triangles.vertices[*std::next(i)], triangles.vertices[*std::next(i, 2)], colors[index] );
 	}
 }
