@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics.h"
+#include "Vec3.h"
 
 class CoordinateTransformer
 {
@@ -12,15 +13,16 @@ public:
 	{
 	}
 
-	Vec2& Transform( Vec2& v ) const
+	Vec3& Transform( Vec3& v ) const
 	{
-		v.x = (  v.x + 1.0f ) * xFactor;
-		v.y = ( -v.y + 1.0f ) * yFactor;
+		const float zInv = 1.0f / v.z;
+		v.x = ( (  v.x * zInv  ) + 1.0f ) * xFactor;
+		v.y = ( ( -v.y * zInv ) + 1.0f ) * yFactor;
 		return v;
 	}
-	Vec2 GetTransformed( const Vec2& v ) const
+	Vec3 GetTransformed( const Vec3& v ) const
 	{
-		return Transform( Vec2(v) );
+		return Transform( Vec3(v) );
 	}
 
 private:

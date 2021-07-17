@@ -43,6 +43,15 @@ void Game::UpdateModel()
 	const float dt = 1 / 60.0f;
 	const float dTheta = PI / 2;
 
+	if ( wnd.kbd.KeyIsPressed(VK_UP) )
+	{
+		zOffset += 0.1f;
+	}
+	else if ( wnd.kbd.KeyIsPressed(VK_DOWN) )
+	{
+		zOffset -= 0.1f;
+	}
+
 	if ( wnd.kbd.KeyIsPressed('Q') )
 	{
 		theta_z += dt * dTheta;
@@ -82,6 +91,7 @@ void Game::ComposeFrame()
 	for ( auto& v : lines.vertices )
 	{
 		v *= m;
+		v += { 0.0f,0.0f,2.0f + zOffset };
 		ct.Transform( v );
 	}
 	for ( auto i = lines.indices.cbegin(), e = lines.indices.cend(); i != e; std::advance(i, 2) )
