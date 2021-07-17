@@ -27,6 +27,8 @@
 #include <array>
 #include <functional>
 
+#include <cmath>
+
 // Ignore the intellisense error "cannot open source file" for .shh files.
 // They will be created during the build sequence before the preprocessor runs.
 namespace FramebufferShaders
@@ -378,6 +380,102 @@ void Graphics::DrawLine( float x1,float y1,float x2,float y2,Color c )
 		if( int( x2 ) > lastIntX )
 		{
 			PutPixel( int( x2 ),int( y2 ),c );
+		}
+	}
+}
+
+void Graphics::DrawTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	const Vec2* pV0 = &v0;
+	const Vec2* pV1 = &v1;
+	const Vec2* pV2 = &v2;
+
+	// sort in ascending order of y values
+	if ( pV1->y < pV0->y ) std::swap( pV0, pV1 );
+	if ( pV2->y < pV0->y ) std::swap( pV0, pV2 );
+	if ( pV2->y < pV1->y ) std::swap( pV1, pV2 );
+
+	if ( pV0->y == pV1->y )
+	{
+		// natual flat-top
+		if ( pV1->x < pV0->x ) std::swap( pV0, pV1 );
+		DrawFlatTopTriangle( *pV0, *pV1, *pV2, c );
+	}
+	else if ( pV1->y == pV2->y )
+	{
+		// natural flat bottom
+		if ( pV2->x < pV1->x ) std::swap(pV1, pV2);
+		DrawFlatBottomTriangle(*pV0, *pV1, *pV2, c);
+	}
+	else
+	{
+		// general triangle
+		const float splittingAlpha = ( pV1->y - pV0->y ) / ( pV2->y - pV0->y );
+		// splitting point of line pV0--pV2
+		const Vec2 vi = *pV0 + ( *pV2 - *pV0 ) * splittingAlpha;
+		if ( vi.x > pV1->x )
+		{
+			// major right
+			DrawFlatTopTriangle( *pV1, vi, *pV2, c );
+			DrawFlatBottomTriangle( *pV0, *pV1, vi, c );
+		}
+		else
+		{
+			// major left
+			DrawFlatTopTriangle( vi, *pV1, *pV2, c );
+			DrawFlatBottomTriangle( *pV0, vi,*pV1, c );
+		}
+	}
+}
+
+void Graphics::DrawFlatTopTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	// inverse gradient
+	const float m0 = ( v2.x - v0.x ) / ( v2.y - v0.y );
+	const float m1 = ( v2.x - v1.x ) / ( v2.y - v1.y );
+
+	// start and end scan lines
+	const int yStart = (int)std::ceil( v0.y - 0.5f );
+	const int yEnd = (int)std::ceil( v2.y - 0.5f );
+
+	for ( int y = yStart; y < yEnd; y++ )
+	{
+		// start and end points
+		const float xStartF = v0.x + m0 * ( float(y) + 0.5f - v0.y );
+		const float xEndF = v1.x + m1 * ( float(y) + 0.5f - v1.y );
+		// start and end points
+		const int xStart = (int)std::ceil( xStartF - 0.5f );
+		const int xEnd = (int)std::ceil( xEndF - 0.5f );
+
+		for ( int x = xStart; x < xEnd; x++ )
+		{
+			PutPixel( x, y, c );
+		}
+	}
+}
+
+void Graphics::DrawFlatBottomTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
+{
+	// inverse gradient
+	const float m0 = ( v1.x - v0.x ) / ( v1.y - v0.y );
+	const float m1 = ( v2.x - v0.x ) / ( v2.y - v0.y );
+
+	// start and end scan lines
+	const int yStart = (int)std::ceil( v0.y - 0.5f );
+	const int yEnd = (int)std::ceil( v2.y - 0.5f );
+
+	for ( int y = yStart; y < yEnd; y++ )
+	{
+		// start and end points
+		const float xStartF = v0.x + m0 * ( float(y) + 0.5f - v0.y );
+		const float xEndF = v0.x + m1 * ( float(y) + 0.5f - v0.y );
+		// start and end points
+		const int xStart = (int)std::ceil( xStartF - 0.5f );
+		const int xEnd = (int)std::ceil( xEndF - 0.5f );
+
+		for (int x = xStart; x < xEnd; x++)
+		{
+			PutPixel(x, y, c);
 		}
 	}
 }
