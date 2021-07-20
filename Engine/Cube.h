@@ -34,13 +34,14 @@ public:
 	}
 	IndexedTriangleList GetTriangles() const
 	{
-		return { vertices, {
+		return {
+			vertices, {
 				0,1,2 , 2,3,0,
-				4,5,6 , 6,7,4,
+				4,6,5 , 4,7,6,
 				0,3,7 , 7,4,0,
-				1,2,5 , 2,5,6,
-				0,1,4 , 1,4,5,
-				3,2,7 , 2,7,6
+				1,5,2 , 2,5,6,
+				0,4,1 , 1,4,5,
+				3,2,7 , 2,6,7
 			}
 		};
 	}
