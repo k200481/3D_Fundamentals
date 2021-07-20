@@ -22,7 +22,7 @@
 
 #include "Graphics.h"
 #include "CoordinateTransformer.h"
-#include "Cube.h"
+#include "CubeSceneSolid.h"
 
 class Game
 {
@@ -36,19 +36,17 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
+
+	void CycleScenes();
+
 	/********************************/
 private:
 	MainWindow& wnd;
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	CoordinateTransformer ct;
-	Cube c;
-
-	float theta_x = 0.0f;
-	float theta_y = 0.0f;
-	float theta_z = 0.0f;
-
-	float zOffset = 2.0f;
+	std::vector<std::unique_ptr<Scene>> scenes;
+	std::vector<std::unique_ptr<Scene>>::iterator i;
+	
 	/********************************/
 };

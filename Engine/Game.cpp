@@ -25,9 +25,11 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd ),
-	c( 1.0f )
+	gfx( wnd )
 {
+	scenes.emplace_back( std::make_unique<CubeSceneSolid>() );
+
+	i = scenes.begin();
 }
 
 void Game::Go()
@@ -41,94 +43,39 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const float dt = 1 / 60.0f;
-	const float dTheta = PI / 2;
+	CycleScenes();
 
-	if ( wnd.kbd.KeyIsPressed(VK_UP) )
-	{
-		zOffset += 0.1f;
-	}
-	else if ( wnd.kbd.KeyIsPressed(VK_DOWN) )
-	{
-		zOffset -= 0.1f;
-	}
+	(*i)->UpdateScene( wnd.mouse, wnd.kbd, dt );
+}
 
-	if ( wnd.kbd.KeyIsPressed('Q') )
+void Game::CycleScenes()
+{
+	Mouse::Event e;
+	while ( ( e = wnd.mouse.Read() ).GetType() != Mouse::Event::Type::Invalid )
 	{
-		theta_z += dt * dTheta;
+		if ( e.GetType() == Mouse::Event::LPress )
+		{
+			if (i == scenes.begin())
+			{
+				i = std::prev(scenes.end());
+			}
+			else
+			{
+				i--;
+			}
+		}
+		else if ( e.GetType() == Mouse::Event::RPress )
+		{
+			i++;
+			if (i == scenes.end())
+			{
+				i = scenes.begin();
+			}
+		}
 	}
-	else if ( wnd.kbd.KeyIsPressed('E') )
-	{
-		theta_z -= dt * dTheta;
-	}
-	
-	if ( wnd.kbd.KeyIsPressed('W') )
-	{
-		theta_x += dt * dTheta;
-	}
-	else if ( wnd.kbd.KeyIsPressed('S') )
-	{
-		theta_x -= dt * dTheta;
-	}
-	
-	if ( wnd.kbd.KeyIsPressed('A') )
-	{
-		theta_y += dt * dTheta;
-	}
-	else if ( wnd.kbd.KeyIsPressed('D') )
-	{
-		theta_y -= dt * dTheta;
-	}
-	theta_x = wrap_angle( theta_x );
-	theta_y = wrap_angle( theta_y );
-	theta_z = wrap_angle( theta_z );
 }
 
 void Game::ComposeFrame()
 {
-	// the colors of the sides of the cube
-	std::vector<Color> colors = {
-		Colors::Yellow,
-		Colors::Red,
-		Colors::Blue,
-		Colors::White,
-		Colors::Green,
-		Colors::Cyan
-	};
-
-	// get triangles and transform vertices from model space to world space
-	auto triangles = c.GetTriangles();
-	const Mat3 m = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-	for (auto& v : triangles.vertices)
-	{
-		v *= m;
-		v += { 0.0f, 0.0f, zOffset };
-	}
-
-	// cull backfaces
-	for ( size_t i = 0, e = triangles.indices.size() / 3; i < e; i++ )
-	{
-		const Vec3& v0 = triangles.vertices[triangles.indices[i * 3]];
-		const Vec3& v1 = triangles.vertices[triangles.indices[i * 3 + 1]];
-		const Vec3& v2 = triangles.vertices[triangles.indices[i * 3 + 2]];
-		
-		triangles.cullingFlags[i] = ( v1 - v0 ) % ( v2 - v0 ) * v0 > 0.0f;
-	}
-
-	// transform vertices to screen/graphics space
-	for ( auto& v : triangles.vertices )
-	{
-		ct.Transform( v );
-	}
-
-	// draw triangles
-	for ( size_t i = 0, e = triangles.indices.size() / 3; i < e; i++ )
-	{
-		if ( !triangles.cullingFlags[i] ) {
-			const Vec3& v0 = triangles.vertices[triangles.indices[i * 3]];
-			const Vec3& v1 = triangles.vertices[triangles.indices[i * 3 + 1]];
-			const Vec3& v2 = triangles.vertices[triangles.indices[i * 3 + 2]];
-
-			gfx.DrawTriangle( v0, v1, v2, colors[i / 2] );
-		}
-	}
+	(*i)->Render( gfx );
 }
