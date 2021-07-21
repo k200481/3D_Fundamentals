@@ -93,6 +93,12 @@
     <ClInclude Include="CubeSceneSolid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TexVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSceneTex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -138,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Chili.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="WoodTex.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

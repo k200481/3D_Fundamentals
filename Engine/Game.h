@@ -22,7 +22,7 @@
 
 #include "Graphics.h"
 #include "CoordinateTransformer.h"
-#include "CubeSceneSolid.h"
+#include "Scene.h"
 
 class Game
 {

@@ -119,6 +119,14 @@ public:
 	{
 		return !(*this == rhs);
 	}
+	_Vec3& InterpolateTo(const _Vec3& rhs, float alpha)
+	{
+		return *this = *this + (rhs - *this) * alpha;
+	}
+	_Vec3 GetInterpolated(const _Vec3& rhs, float alpha) const
+	{
+		return _Vec3(*this).InterpolateTo(rhs, alpha);
+	}
 public:
 	T z;
 };

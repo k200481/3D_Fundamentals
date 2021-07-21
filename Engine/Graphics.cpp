@@ -428,6 +428,50 @@ void Graphics::DrawTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Colo
 	}
 }
 
+void Graphics::DrawTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex)
+{
+	const TexVertex* pV0 = &v0;
+	const TexVertex* pV1 = &v1;
+	const TexVertex* pV2 = &v2;
+
+	// sort in ascending order of y values
+	if (pV1->pos.y < pV0->pos.y) std::swap(pV0, pV1);
+	if (pV2->pos.y < pV0->pos.y) std::swap(pV0, pV2);
+	if (pV2->pos.y < pV1->pos.y) std::swap(pV1, pV2);
+
+	if ( pV0->pos.y == pV1->pos.y )
+	{
+		// natural flat top
+		if ( pV1->pos.x < pV0->pos.x ) std::swap(pV0, pV1);
+		DrawFlatTopTriangleTex( *pV0, *pV1, *pV2, tex );
+	}
+	else if ( pV1->pos.y == pV2->pos.y )
+	{
+		// natural flat bottom
+		if ( pV2->pos.x < pV1->pos.x ) std::swap(pV2, pV1);
+		DrawFlatBottomTriangleTex( *pV0, *pV1, *pV2, tex );
+	}
+	else
+	{
+		// general triangle
+		const float splittingAlpha = ( pV1->pos.y - pV0->pos.y ) / ( pV2->pos.y - pV0->pos.y );
+		const TexVertex vi = pV0->GetInterpotated( *pV2, splittingAlpha );
+
+		if ( vi.pos.x > pV1->pos.x )
+		{
+			// major right
+			DrawFlatTopTriangleTex( *pV1, vi, *pV2, tex );
+			DrawFlatBottomTriangleTex( *pV0, *pV1, vi, tex );
+		}
+		else
+		{
+			// major left
+			DrawFlatTopTriangleTex( vi, *pV1, *pV2, tex );
+			DrawFlatBottomTriangleTex( *pV0, vi, *pV1, tex );
+		}
+	}
+}
+
 void Graphics::DrawFlatTopTriangle(const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c)
 {
 	// inverse gradient
@@ -479,3 +523,72 @@ void Graphics::DrawFlatBottomTriangle(const Vec2& v0, const Vec2& v1, const Vec2
 		}
 	}
 }
+
+void Graphics::DrawFlatTopTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex)
+{
+	const float dy = v2.pos.y - v0.pos.y;
+	const TexVertex dv0 = ( v2 - v0 ) / dy;
+	const TexVertex dv1 = ( v2 - v1 ) / dy;
+
+	// start and end scan lines
+	const int yStart = (int)std::ceil( v0.pos.y - 0.5f );
+	const int yEnd = (int)std::ceil( v2.pos.y - 0.5f );
+
+	TexVertex itc0 = v0;
+	TexVertex itc1 = v1;
+
+	itc0 += dv0 * ( float(yStart) + 0.5f - v0.pos.y );
+	itc1 += dv1 * ( float(yStart) + 0.5f - v0.pos.y );
+
+	DrawFlatTriangleTex( yStart, yEnd, itc0, itc1, dv0, dv1, tex );
+}
+
+void Graphics::DrawFlatBottomTriangleTex(const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex)
+{
+	const float dy = v2.pos.y - v0.pos.y;
+	const TexVertex dv0 = ( v1 - v0 ) / dy;
+	const TexVertex dv1 = ( v2 - v0 ) / dy;
+
+	// start and end scan lines
+	const int yStart = (int)std::ceil( v0.pos.y - 0.5f );
+	const int yEnd = (int)std::ceil( v2.pos.y - 0.5f );
+
+	TexVertex itc0 = v0;
+	TexVertex itc1 = v0;
+
+	itc0 += dv0 * ( float(yStart) + 0.5f - v0.pos.y );
+	itc1 += dv1 * ( float(yStart) + 0.5f - v0.pos.y );
+
+	DrawFlatTriangleTex( yStart, yEnd, itc0, itc1, dv0, dv1, tex );
+}
+
+void Graphics::DrawFlatTriangleTex( float yStart, float yEnd, TexVertex& itc0, TexVertex& itc1, const TexVertex& d0, const TexVertex& d1, const Surface& tex )
+{
+	// constants
+	const float texWidth = (float)tex.GetWidth();
+	const float texHeight = (float)tex.GetHeight();
+	const float tex_xClamp = texWidth - 1.0f;
+	const float tex_yClamp = texHeight - 1.0f;
+
+	// loop
+	for ( int y = yStart; y < yEnd; y++, itc0 += d0, itc1 += d1 )
+	{
+		const int xStart = (int)std::ceil( itc0.pos.x - 0.5f );
+		const int xEnd = (int)std::ceil( itc1.pos.x - 0.5f );
+
+		const Vec2 texStep = ( itc1.tc - itc0.tc ) / ( itc1.pos.x - itc0.pos.x );
+		Vec2 tc = itc0.tc;
+		for ( int x = xStart; x < xEnd; x++, tc += texStep )
+		{
+			PutPixel(
+				x, y,
+				tex.GetPixel(
+					(int)std::min( tc.x * texWidth, tex_xClamp ),
+					(int)std::min( tc.y * texHeight, tex_yClamp )
+				)
+			);
+		}
+	}
+}
+
+

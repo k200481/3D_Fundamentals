@@ -22,12 +22,16 @@
 #include "Game.h"
 #include "Mat3.h"
 
+#include "CubeSceneSolid.h"
+#include "CubeSceneTex.h"
+
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd )
 {
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>() );
+	scenes.emplace_back( std::make_unique<CubeSceneTex>( L"WoodTex.jpg" ) );
 
 	i = scenes.begin();
 }
