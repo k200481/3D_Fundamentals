@@ -32,6 +32,7 @@ Game::Game( MainWindow& wnd )
 {
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>() );
 	scenes.emplace_back( std::make_unique<CubeSceneTex>( L"WoodTex.jpg" ) );
+	scenes.emplace_back( std::make_unique<CubeSceneTex>( L"abby.jpg" ) );
 
 	i = scenes.begin();
 }

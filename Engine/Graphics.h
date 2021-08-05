@@ -64,6 +64,7 @@ public:
 	void DrawLine( float x1,float y1,float x2,float y2,Color c );
 	void DrawTriangle( const Vec2& v0, const Vec2& v1, const Vec2& v2, Color c );
 	void DrawTriangleTex( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
+	void DrawTriangleTexWrap( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
@@ -79,6 +80,9 @@ private:
 	void DrawFlatTopTriangleTex( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
 	void DrawFlatBottomTriangleTex( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
 	void DrawFlatTriangleTex( float yStart, float yEnd, TexVertex& itc0, TexVertex& itc1, const TexVertex& d0, const TexVertex& d1, const Surface& tex );
+	void DrawFlatTopTriangleTexWrap( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
+	void DrawFlatBottomTriangleTexWrap( const TexVertex& v0, const TexVertex& v1, const TexVertex& v2, const Surface& tex );
+	void DrawFlatTriangleTexWrap( float yStart, float yEnd, TexVertex& itc0, TexVertex& itc1, const TexVertex& d0, const TexVertex& d1, const Surface& tex );
 private:
 	GDIPlusManager										gdipMan;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

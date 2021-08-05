@@ -9,7 +9,7 @@
 class Cube
 {
 public:
-	Cube( float size )
+	Cube( float size, float texDim = 1.0f )
 		:
 		side( size / 2.0f )
 	{
@@ -46,17 +46,17 @@ public:
 			}
 		};
 	}
-	IndexedTriangleList<TexVertex> GetTrianglesTex() const
+	IndexedTriangleList<TexVertex> GetTrianglesTex( float texDim = 1.0f ) const
 	{
 		std::vector<TexVertex> verts;
 		verts.emplace_back( Vec3{ -side,  side, -side }, Vec2{ 0.0f, 0.0f } ); // 0
-		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ 1.0f, 0.0f } ); // 1
+		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ texDim, 0.0f } ); // 1
 		verts.emplace_back( Vec3{  side,  side,  side }, Vec2{ 0.0f, 0.0f } ); // 2
-		verts.emplace_back( Vec3{  side,  side, -side }, Vec2{ 1.0f, 0.0f } ); // 3
-		verts.emplace_back( Vec3{ -side, -side, -side }, Vec2{ 0.0f, 1.0f } ); // 4
-		verts.emplace_back( Vec3{ -side, -side,  side }, Vec2{ 1.0f, 1.0f } ); // 5
-		verts.emplace_back( Vec3{  side, -side,  side }, Vec2{ 0.0f, 1.0f } ); // 6
-		verts.emplace_back( Vec3{  side, -side, -side }, Vec2{ 1.0f, 1.0f } ); // 7
+		verts.emplace_back( Vec3{  side,  side, -side }, Vec2{ texDim, 0.0f } ); // 3
+		verts.emplace_back( Vec3{ -side, -side, -side }, Vec2{ 0.0f, texDim } ); // 4
+		verts.emplace_back( Vec3{ -side, -side,  side }, Vec2{ texDim, texDim } ); // 5
+		verts.emplace_back( Vec3{  side, -side,  side }, Vec2{ 0.0f, texDim } ); // 6
+		verts.emplace_back( Vec3{  side, -side, -side }, Vec2{ texDim, texDim } ); // 7
 
 		return {
 			verts, {
@@ -68,6 +68,37 @@ public:
 				3,2,7 , 2,6,7
 			}
 		};
+	}
+
+	IndexedTriangleList<TexVertex> GetTrianglesTexUnfolded( float tDim = 1.0f ) const
+	{
+		std::vector<TexVertex> verts;
+		verts.emplace_back( Vec3{ -side,  side, -side }, Vec2{ tDim, 0.0f } ); // 0
+		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ 0.0f, 0.0f } ); // 1
+		verts.emplace_back( Vec3{  side,  side,  side }, Vec2{ 3 * tDim, 0.0f } ); // 2
+		verts.emplace_back( Vec3{  side,  side, -side }, Vec2{ 2 * tDim, 0.0f } ); // 3
+		verts.emplace_back( Vec3{ -side, -side, -side }, Vec2{ tDim, tDim } ); // 4
+		verts.emplace_back( Vec3{ -side, -side,  side }, Vec2{ 0.0f, tDim } ); // 5
+		verts.emplace_back( Vec3{  side, -side,  side }, Vec2{ 3 * tDim, tDim } ); // 6
+		verts.emplace_back( Vec3{  side, -side, -side }, Vec2{ 2 * tDim, tDim } ); // 7
+		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ 4 * tDim, 0.0f } ); // 8
+		verts.emplace_back( Vec3{ -side, -side,  side }, Vec2{ 4 * tDim, tDim } ); // 9
+		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ tDim, tDim } ); // 10
+		verts.emplace_back( Vec3{  side,  side,  side }, Vec2{ 2 * tDim, tDim } ); // 11
+		verts.emplace_back( Vec3{ -side, -side,  side }, Vec2{ tDim, 2 * tDim } ); // 12
+		verts.emplace_back( Vec3{  side, -side,  side }, Vec2{ 2 * tDim, 2 * tDim } ); // 13
+
+		return {
+			verts, {
+				0,3,7 , 0,7,4,
+				3,2,6 , 3,6,7,
+				2,8,9 , 2,9,6,
+				1,0,4 , 1,4,5,
+				10,11,3 , 10,3,0,
+				4,7,13 , 4,13,12
+			}
+		};
+
 	}
 
 private:

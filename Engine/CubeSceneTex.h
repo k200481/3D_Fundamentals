@@ -14,7 +14,7 @@ public:
 	virtual void Render( Graphics& gfx ) const override
 	{
 		// get triangles and transform vertices from model space to world space
-		auto triangles = c.GetTrianglesTex();
+		auto triangles = c.GetTrianglesTexUnfolded( 2.0f );
 		const Mat3 m = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
 		for (auto& v : triangles.vertices)
 		{
@@ -46,7 +46,7 @@ public:
 				const TexVertex& v1 = triangles.vertices[triangles.indices[i * 3 + 1]];
 				const TexVertex& v2 = triangles.vertices[triangles.indices[i * 3 + 2]];
 
-				gfx.DrawTriangleTex(v0, v1, v2, s);
+				gfx.DrawTriangleTexWrap(v0, v1, v2, s);
 			}
 		}
 	}
