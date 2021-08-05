@@ -90,13 +90,16 @@
     <ClInclude Include="CubeScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubeSceneSolid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TexVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CubeSceneTex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

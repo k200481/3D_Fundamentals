@@ -12,10 +12,8 @@ struct IndexedTriangleList
 	{
 		assert( vertices.size() > 2 );
 		assert( indices.size() % 3 == 0 );
-		cullingFlags.resize( indices.size() / 3, false );
 	}
 
 	std::vector<T> vertices;
 	std::vector<size_t> indices;
-	std::vector<bool> cullingFlags;
 };

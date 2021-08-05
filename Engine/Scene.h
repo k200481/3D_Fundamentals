@@ -8,6 +8,6 @@ class Scene
 {
 public:
 	virtual  void UpdateScene( Mouse& mouse, const Keyboard& kbd, float dt ) = 0;
-	virtual void Render( Graphics& gfx ) const = 0;
+	virtual void Render( Graphics& gfx ) = 0;
 	virtual ~Scene() = default;
 };

@@ -8,7 +8,7 @@ public:
 	CubeSceneSolid() = default;
 	virtual  ~CubeSceneSolid() = default;
 
-	virtual void Render(Graphics& gfx) const override
+	virtual void Render(Graphics& gfx) override
 	{
 		// the colors of the sides of the cube
 		std::vector<Color> colors = {

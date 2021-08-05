@@ -57,11 +57,11 @@ public:
 		theta_x = wrap_angle(theta_x);
 		theta_y = wrap_angle(theta_y);
 		theta_z = wrap_angle(theta_z);
+
+
 	}
 
 protected:
-	CoordinateTransformer ct;
-
 	Cube c;
 
 	float theta_x = 0.0f;

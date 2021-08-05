@@ -21,6 +21,7 @@
 #pragma once
 
 #include <math.h>
+#include <cmath>
 
 constexpr float PI = 3.14159265f;
 constexpr double PI_D = 3.1415926535897932;
@@ -36,4 +37,10 @@ inline auto wrap_angle( T angle )
 {
 	T moddedAngle = (T)fmod( angle, (T)2.0 * (T)PI_D );
 	return ( moddedAngle > (T)PI_D ) ? ( moddedAngle - (T)2.0 * (T)PI_D ) : moddedAngle;
+}
+
+template <typename T>
+inline T interpolate( T src, T dst, float alpha )
+{
+	return { src + (dst - src) * alpha };
 }

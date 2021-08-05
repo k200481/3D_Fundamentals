@@ -4,10 +4,11 @@
 #include "IndexedLineList.h"
 #include "IndexedTriangleList.h"
 #include "Vec3.h"
-#include "TexVertex.h"
+#include "Pipeline.h"
 
 class Cube
 {
+	typedef Pipeline::Vertex Vertex;
 public:
 	Cube( float size, float texDim = 1.0f )
 		:
@@ -46,9 +47,9 @@ public:
 			}
 		};
 	}
-	IndexedTriangleList<TexVertex> GetTrianglesTex( float texDim = 1.0f ) const
+	IndexedTriangleList<Vertex> GetTrianglesTex( float texDim = 1.0f ) const
 	{
-		std::vector<TexVertex> verts;
+		std::vector<Vertex> verts;
 		verts.emplace_back( Vec3{ -side,  side, -side }, Vec2{ 0.0f, 0.0f } ); // 0
 		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ texDim, 0.0f } ); // 1
 		verts.emplace_back( Vec3{  side,  side,  side }, Vec2{ 0.0f, 0.0f } ); // 2
@@ -70,9 +71,9 @@ public:
 		};
 	}
 
-	IndexedTriangleList<TexVertex> GetTrianglesTexUnfolded( float tDim = 1.0f ) const
+	IndexedTriangleList<Vertex> GetTrianglesTexUnfolded( float tDim = 1.0f ) const
 	{
-		std::vector<TexVertex> verts;
+		std::vector<Vertex> verts;
 		verts.emplace_back( Vec3{ -side,  side, -side }, Vec2{ tDim, 0.0f } ); // 0
 		verts.emplace_back( Vec3{ -side,  side,  side }, Vec2{ 0.0f, 0.0f } ); // 1
 		verts.emplace_back( Vec3{  side,  side,  side }, Vec2{ 3 * tDim, 0.0f } ); // 2
