@@ -139,9 +139,12 @@
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="ChiliWin.h" />
+    <ClInclude Include="ColorBlendEffect.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="CoordinateTransformer.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeSceneColorBlend.h" />
+    <ClInclude Include="CubeSceneSolid.h" />
     <ClInclude Include="CubeSceneTex.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Game.h" />
@@ -159,7 +162,9 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SolidColorEffect.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="TextureEffect.h" />
     <ClInclude Include="TexVertex.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vec2.h" />

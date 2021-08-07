@@ -8,75 +8,11 @@
 #include "Mat3.h"
 #include <algorithm>
 
-
+template <typename Effect>
 class Pipeline
 {
 public:
-	// vertex type used for geometry and throughout pipeline
-	class Vertex
-	{
-	public:
-		Vertex() = default;
-		Vertex(const Vec3& pos)
-			:
-			pos(pos)
-		{}
-		// this enables template functions clone a vertex
-		// while changing the pos only
-		Vertex(const Vec3& pos, const Vertex& src)
-			:
-			t(src.t),
-			pos(pos)
-		{}
-		Vertex(const Vec3& pos, const Vec2& t)
-			:
-			t(t),
-			pos(pos)
-		{}
-		Vertex& operator+=(const Vertex& rhs)
-		{
-			pos += rhs.pos;
-			t += rhs.t;
-			return *this;
-		}
-		Vertex operator+(const Vertex& rhs) const
-		{
-			return Vertex(*this) += rhs;
-		}
-		Vertex& operator-=(const Vertex& rhs)
-		{
-			pos -= rhs.pos;
-			t -= rhs.t;
-			return *this;
-		}
-		Vertex operator-(const Vertex& rhs) const
-		{
-			return Vertex(*this) -= rhs;
-		}
-		Vertex& operator*=(float rhs)
-		{
-			pos *= rhs;
-			t *= rhs;
-			return *this;
-		}
-		Vertex operator*(float rhs) const
-		{
-			return Vertex(*this) *= rhs;
-		}
-		Vertex& operator/=(float rhs)
-		{
-			pos /= rhs;
-			t /= rhs;
-			return *this;
-		}
-		Vertex operator/(float rhs) const
-		{
-			return Vertex(*this) /= rhs;
-		}
-	public:
-		Vec3 pos;
-		Vec2 t;
-	};
+	typedef typename Effect::Vertex Vertex;
 public:
 	Pipeline(Graphics& gfx)
 		:
@@ -94,10 +30,6 @@ public:
 	{
 		translation = translation_in;
 	}
-	void BindTexture(const std::wstring& filename)
-	{
-		pTex = std::make_unique<Surface>(Surface::FromFile(filename));
-	}
 private:
 	void ProcessVertices(const std::vector<Vertex>& vertices, const std::vector<size_t>& indices)
 	{
@@ -107,7 +39,7 @@ private:
 		// transform vertices using matrix + vector
 		for (const auto& v : vertices)
 		{
-			verticesOut.emplace_back(v.pos * rotation + translation, v.t);
+			verticesOut.emplace_back( v.pos * rotation + translation, v );
 		}
 
 		// assemble triangles from stream of indices and vertices
@@ -223,12 +155,6 @@ private:
 		itEdge0 += dv0 * ( float(yStart) + 0.5f - it0.pos.y );
 		itEdge1 += dv1 * ( float(yStart) + 0.5f - it0.pos.y );
 
-		// constants
-		const float texWidth = (float)pTex->GetWidth();
-		const float texHeight = (float)pTex->GetHeight();
-		const float tex_xClamp = texWidth - 1.0f;
-		const float tex_yClamp = texHeight - 1.0f;
-
 		// loop
 		for ( int y = yStart; y < yEnd; y++, itEdge0 += dv0, itEdge1 += dv1 )
 		{
@@ -241,18 +167,18 @@ private:
 			{
 				gfx.PutPixel(
 					x, y,
-					pTex->GetPixel( (int)std::min( tc.t.x * texWidth, tex_xClamp ), 
-									(int)std::min( tc.t.y * texHeight, tex_yClamp )
-					)
+					effect.ps( tc )
 				);
 			}
 		}
 	}
+
+public:
+	Effect effect;
 private:
 	Graphics& gfx;
 	CoordinateTransformer ct;
 	
-	Mat3 rotation;
-	Vec3 translation;
-	std::unique_ptr<Surface> pTex;
+	Mat3 rotation = Mat3::Identity();
+	Vec3 translation = { 0.0f,0.0f,0.0f };
 };

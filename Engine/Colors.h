@@ -20,6 +20,8 @@
 ******************************************************************************************/
 #pragma once
 
+#include "Vec3.h"
+
 class Color
 {
 public:
@@ -90,6 +92,16 @@ public:
 	void SetB( unsigned char b )
 	{
 		dword = (dword & 0xFFFFFF00u) | b;
+	}
+
+	explicit Color( const Vec3& rhs )
+		:
+		Color( rhs.x, rhs.y, rhs.z )
+	{
+	}
+	explicit operator Vec3() const
+	{
+		return Vec3{ (float)GetR(), (float)GetG(), (float)GetB() };
 	}
 };
 

@@ -23,6 +23,8 @@
 #include "Mat3.h"
 
 #include "CubeSceneTex.h"
+#include "CubeSceneColorBlend.h"
+#include "CubeSceneSolid.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -30,6 +32,8 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd )
 {
 	scenes.emplace_back( std::make_unique<CubeSceneTex>( gfx, L"WoodTex.jpg" ) );
+	scenes.emplace_back( std::make_unique<CubeSceneColorBlend>( gfx ) );
+	scenes.emplace_back( std::make_unique<CubeSceneSolid>( gfx ) );
 
 	i = scenes.begin();
 }
@@ -79,5 +83,5 @@ void Game::CycleScenes()
 
 void Game::ComposeFrame()
 {
-	(*i)->Render( gfx );
+	(*i)->Render();
 }
