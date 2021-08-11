@@ -25,6 +25,7 @@
 #include "CubeSceneTex.h"
 #include "CubeSceneColorBlend.h"
 #include "CubeSceneSolid.h"
+#include "DoubleCubeScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -34,6 +35,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<CubeSceneTex>( gfx, L"WoodTex.jpg" ) );
 	scenes.emplace_back( std::make_unique<CubeSceneColorBlend>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>( gfx ) );
+	scenes.emplace_back( std::make_unique<DoubleCubeScene>( gfx ) );
 
 	i = scenes.begin();
 }

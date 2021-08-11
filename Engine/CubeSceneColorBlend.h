@@ -17,6 +17,8 @@ public:
 	
 	virtual void Render() override
 	{
+		pipeline.BeginScene();
+
 		IndexedTriangleList<Vertex> triangles = Cube::GetPlain<Vertex>();
 
 		triangles.vertices[0].color = Vec3( Colors::Red );

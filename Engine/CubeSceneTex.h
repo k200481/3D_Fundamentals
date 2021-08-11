@@ -18,6 +18,7 @@ public:
 	
 	virtual void Render() override
 	{
+		pipeline.BeginScene();
 		// get matrix to transform vertices from model space to world space
 		const Mat3 m = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
 

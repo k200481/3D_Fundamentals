@@ -18,6 +18,7 @@ public:
 
 	virtual void Render() override
 	{
+		pipeline.BeginScene();
 		// the colors of the sides of the cube
 		std::vector<Color> colors = {
 			Colors::Yellow,

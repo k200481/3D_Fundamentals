@@ -8,6 +8,8 @@
 #include "Mat3.h"
 #include <algorithm>
 
+#include "ZBuffer.h"
+
 template <typename Effect>
 class Pipeline
 {
@@ -16,8 +18,13 @@ public:
 public:
 	Pipeline(Graphics& gfx)
 		:
-		gfx(gfx)
+		gfx(gfx),
+		zBuf( Graphics::ScreenWidth, Graphics::ScreenHeight )
 	{}
+	void BeginScene()
+	{
+		zBuf.Clear();
+	}
 	void Draw(const IndexedTriangleList<Vertex>& triList)
 	{
 		ProcessVertices(triList.vertices, triList.indices);
@@ -186,14 +193,17 @@ private:
 			{
 				// z actually stores zInv
 				const float z = 1.0f / tc.pos.z;
-				// recover the coordinate in object space 
-				// (technically world space since they are trandformed and rotated)
-				// can't use tc here because it is being added into
-				const auto v = tc * z;
-				gfx.PutPixel(
-					x, y,
-					effect.ps( v )
-				);
+				if ( zBuf.TestAndSet( x, y, z ) )
+				{
+					// recover the coordinate in object space 
+					// (technically world space since they are trandformed and rotated)
+					// can't use tc here because it is being added into
+					const auto v = tc * z;
+					gfx.PutPixel(
+						x, y,
+						effect.ps( v )
+					);
+				}
 			}
 		}
 	}
@@ -203,6 +213,7 @@ public:
 private:
 	Graphics& gfx;
 	CoordinateTransformer ct;
+	ZBuffer zBuf;
 	
 	Mat3 rotation = Mat3::Identity();
 	Vec3 translation = { 0.0f,0.0f,0.0f };
