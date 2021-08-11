@@ -96,7 +96,7 @@ public:
 
 	explicit Color( const Vec3& rhs )
 		:
-		Color( rhs.x, rhs.y, rhs.z )
+		Color( (unsigned char)rhs.x, (unsigned char)rhs.y, (unsigned char)rhs.z )
 	{
 	}
 	explicit operator Vec3() const
