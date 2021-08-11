@@ -5,6 +5,8 @@
 #include <cmath>
 #include <string>
 
+#include "DefaultVertexShader.h"
+
 class TextureEffect
 {
 public:
@@ -73,6 +75,7 @@ public:
 		Vec3 pos;
 		Vec2 t;
 	};
+	typedef DefaultVertexShader<Vertex> VertexShader;
 public:
 	// 
 	class PixelShader
@@ -103,4 +106,5 @@ public:
 
 public:
 	PixelShader ps;
+	VertexShader vs;
 };

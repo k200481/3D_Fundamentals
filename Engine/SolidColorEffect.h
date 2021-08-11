@@ -2,6 +2,7 @@
 
 #include "Vec3.h"
 #include "Graphics.h"
+#include "DefaultVertexShader.h"
 
 class SolidColorEffect
 {
@@ -67,6 +68,8 @@ public:
 		Vec3 pos;
 		Color color;
 	};
+	typedef DefaultVertexShader<Vertex> VertexShader;
+
 public:
 	//
 	class PixelShader
@@ -80,4 +83,5 @@ public:
 
 public:
 	PixelShader ps;
+	VertexShader vs;
 };

@@ -90,13 +90,13 @@ public:
 		}
 
 		// draw the second cube
-		pipeline.BindRotation(m2);
-		pipeline.BindTranslation({ 0.0f, 0.0f, zOffset2 });
+		pipeline.effect.vs.BindRotation(m2);
+		pipeline.effect.vs.BindTranslation({ 0.0f, 0.0f, zOffset2 });
 		pipeline.Draw(triangles2);
 
 		// draw the first cube
-		pipeline.BindRotation(m1);
-		pipeline.BindTranslation({ -0.0f, 0.0f, zOffset1 });
+		pipeline.effect.vs.BindRotation(m1);
+		pipeline.effect.vs.BindTranslation({ -0.0f, 0.0f, zOffset1 });
 		pipeline.Draw(triangles1);
 	}
 

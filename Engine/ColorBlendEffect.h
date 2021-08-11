@@ -2,6 +2,7 @@
 
 #include "Vec3.h"
 #include "Graphics.h"
+#include "DefaultVertexShader.h"
 
 class ColorBlendEffect
 {
@@ -71,6 +72,7 @@ public:
 		Vec3 pos;
 		Vec3 color;
 	};
+	typedef DefaultVertexShader<Vertex> VertexShader;
 public:
 	//
 	class PixelShader
@@ -84,4 +86,5 @@ public:
 
 public:
 	PixelShader ps;
+	VertexShader vs;
 };

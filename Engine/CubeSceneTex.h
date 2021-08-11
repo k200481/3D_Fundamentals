@@ -22,8 +22,8 @@ public:
 		// get matrix to transform vertices from model space to world space
 		const Mat3 m = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
 
-		pipeline.BindRotation( m );
-		pipeline.BindTranslation({ 0.0f, 0.0f, zOffset });
+		pipeline.effect.vs.BindRotation( m );
+		pipeline.effect.vs.BindTranslation({ 0.0f, 0.0f, zOffset });
 		pipeline.Draw( c.GetTrianglesTex<Vertex>() );
 	}
 

@@ -38,8 +38,8 @@ public:
 			triangles.vertices[i].color = colors[i / 4];
 		}
 
-		pipeline.BindRotation( m );
-		pipeline.BindTranslation( { 0.0f, 0.0f, zOffset } );
+		pipeline.effect.vs.BindRotation( m );
+		pipeline.effect.vs.BindTranslation( { 0.0f, 0.0f, zOffset } );
 		
 		pipeline.Draw( triangles );
 	}

@@ -15,6 +15,7 @@ class Pipeline
 {
 public:
 	typedef typename Effect::Vertex Vertex;
+	typedef typename Effect::VertexShader::Output VSOut;
 public:
 	Pipeline(Graphics& gfx)
 		:
@@ -29,33 +30,22 @@ public:
 	{
 		ProcessVertices(triList.vertices, triList.indices);
 	}
-	void BindRotation(const Mat3& rotation_in)
-	{
-		rotation = rotation_in;
-	}
-	void BindTranslation(const Vec3& translation_in)
-	{
-		translation = translation_in;
-	}
 private:
 	// transforms vertices to world space
 	void ProcessVertices(const std::vector<Vertex>& vertices, const std::vector<size_t>& indices)
 	{
 		// create vertex vector for vs output
-		std::vector<Vertex> verticesOut;
+		std::vector<VSOut> verticesOut( vertices.size() );
 
-		// transform vertices using matrix + vector
-		for (const auto& v : vertices)
-		{
-			verticesOut.emplace_back( v.pos * rotation + translation, v );
-		}
+		// perform vertex shader transformations
+		std::transform( vertices.begin(), vertices.end(), verticesOut.begin(), effect.vs );
 
 		// assemble triangles from stream of indices and vertices
 		AssembleTriangles(verticesOut, indices);
 	}
 	// creates triangles from the vertices and indices
 	// also culls backfaces
-	void AssembleTriangles(const std::vector<Vertex>& vertices, const std::vector<size_t>& indices)
+	void AssembleTriangles(const std::vector<VSOut>& vertices, const std::vector<size_t>& indices)
 	{
 		// assemble triangles in the stream and process
 		for (size_t i = 0, end = indices.size() / 3;
@@ -74,12 +64,12 @@ private:
 		}
 	}
 	// creates a triangle object
-	void ProcessTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2)
+	void ProcessTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2)
 	{
-		PostProcessTriangleVertices(Triangle<Vertex>{ v0, v1, v2 });
+		PostProcessTriangleVertices(Triangle<VSOut>{ v0, v1, v2 });
 	}
 	// transforms triangle's vertices to perspective/screen space
-	void PostProcessTriangleVertices(Triangle<Vertex>& triangle)
+	void PostProcessTriangleVertices(Triangle<VSOut>& triangle)
 	{
 		ct.Transform( triangle.v0 );
 		ct.Transform( triangle.v1 );
@@ -90,12 +80,12 @@ private:
 	}
 	// identifies the type of triangle and calls either draw flat top or draw flat bottom
 	// with the appropriate parameters
-	void DrawTriangle(const Triangle<Vertex>& triangle)
+	void DrawTriangle(const Triangle<VSOut>& triangle)
 	{
 		// using pointers so we can swap (for sorting purposes)
-		const Vertex* pv0 = &triangle.v0;
-		const Vertex* pv1 = &triangle.v1;
-		const Vertex* pv2 = &triangle.v2;
+		const VSOut* pv0 = &triangle.v0;
+		const VSOut* pv1 = &triangle.v1;
+		const VSOut* pv2 = &triangle.v2;
 
 		// sorting vertices by y
 		if (pv1->pos.y < pv0->pos.y) std::swap(pv0, pv1);
@@ -137,7 +127,7 @@ private:
 		}
 	}
 	// does the parts unique to flat top triangles and calls draw flat triangle 
-	void DrawFlatTopTriangle(const Vertex& it0, const Vertex& it1, const Vertex& it2)
+	void DrawFlatTopTriangle(const VSOut& it0, const VSOut& it1, const VSOut& it2)
 	{
 		// total y distance
 		const float dy = it2.pos.y - it0.pos.y;
@@ -152,7 +142,7 @@ private:
 		DrawFlatTriangle( it0, it1, it2, di0, di1, itEdge1 );
 	}
 	// does the parts unique to flat bottom tirangles and calls draw flat triangle
-	void DrawFlatBottomTriangle(const Vertex& it0, const Vertex& it1, const Vertex& it2)
+	void DrawFlatBottomTriangle(const VSOut& it0, const VSOut& it1, const VSOut& it2)
 	{
 		// total y distance
 		const float dy = it2.pos.y - it0.pos.y;
@@ -167,7 +157,7 @@ private:
 		DrawFlatTriangle( it0, it1, it2, di0, di1, itEdge1 );
 	}
 	// draws a flat triangle, handles the parts in common in both flat top and flat bottom triangles
-	void DrawFlatTriangle(const Vertex& it0, const Vertex& it1, const Vertex& it2, const Vertex& dv0, const Vertex& dv1, Vertex itEdge1)
+	void DrawFlatTriangle(const VSOut& it0, const VSOut& it1, const VSOut& it2, const VSOut& dv0, const VSOut& dv1, VSOut itEdge1)
 	{
 		const int yStart = (int)std::ceil( it0.pos.y - 0.5f );
 		const int yEnd = (int)std::ceil( it2.pos.y - 0.5f );
@@ -186,9 +176,9 @@ private:
 			const int xEnd = (int)std::ceil(itEdge1.pos.x - 0.5f);
 
 			// the coordinate in perspective space to be drawn
-			Vertex tc = itEdge0;
+			VSOut tc = itEdge0;
 			// the rate at which this coordinate changes with every change in x
-			Vertex dt = ( itEdge1 - itEdge0 ) / ( itEdge1.pos.x - itEdge0.pos.x );
+			VSOut dt = ( itEdge1 - itEdge0 ) / ( itEdge1.pos.x - itEdge0.pos.x );
 			for ( int x = xStart; x < xEnd; x++, tc += dt )
 			{
 				// z actually stores zInv
@@ -214,7 +204,4 @@ private:
 	Graphics& gfx;
 	CoordinateTransformer ct;
 	ZBuffer zBuf;
-	
-	Mat3 rotation = Mat3::Identity();
-	Vec3 translation = { 0.0f,0.0f,0.0f };
 };
