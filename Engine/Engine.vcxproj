@@ -146,6 +146,7 @@
     <ClInclude Include="CubeSceneColorBlend.h" />
     <ClInclude Include="CubeSceneSolid.h" />
     <ClInclude Include="CubeSceneTex.h" />
+    <ClInclude Include="DoubleCubeScene.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
