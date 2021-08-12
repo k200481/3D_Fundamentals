@@ -16,6 +16,15 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{8b6c92a8-f65d-451e-80e3-d65773602b92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects">
+      <UniqueIdentifier>{db17819e-5b68-4913-950e-d3b62abf412c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{d3737a99-2c67-4208-86b2-3e1bc5f136a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes\Cube Scenes">
+      <UniqueIdentifier>{02908a49-e010-4f43-b468-6e771e59082d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -84,16 +93,7 @@
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TexVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSceneTex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pipeline.h">
@@ -102,29 +102,53 @@
     <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSceneColorBlend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorBlendEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidColorEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSceneSolid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DoubleCubeScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ZBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DefaultVertexShader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorBlendEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidColorEffect.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeScene.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSceneColorBlend.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSceneSolid.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSceneTex.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleCubeScene.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneWaveScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSceneVertexColor.h">
+      <Filter>Header Files\Scenes\Cube Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexColorEffect.h">
+      <Filter>Header Files\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

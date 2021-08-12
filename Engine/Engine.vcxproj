@@ -146,6 +146,7 @@
     <ClInclude Include="CubeSceneColorBlend.h" />
     <ClInclude Include="CubeSceneSolid.h" />
     <ClInclude Include="CubeSceneTex.h" />
+    <ClInclude Include="CubeSceneVertexColor.h" />
     <ClInclude Include="DefaultVertexShader.h" />
     <ClInclude Include="DoubleCubeScene.h" />
     <ClInclude Include="DXErr.h" />
@@ -161,6 +162,8 @@
     <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Pipeline.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="PlaneWaveScene.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -171,6 +174,8 @@
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="VertexColorEffect.h" />
+    <ClInclude Include="WaveEffect.h" />
     <ClInclude Include="ZBuffer.h" />
   </ItemGroup>
   <ItemGroup>

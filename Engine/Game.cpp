@@ -26,6 +26,8 @@
 #include "CubeSceneColorBlend.h"
 #include "CubeSceneSolid.h"
 #include "DoubleCubeScene.h"
+#include "PlaneWaveScene.h"
+#include "CubeSceneVertexColor.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -36,6 +38,8 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<CubeSceneColorBlend>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>( gfx ) );
 	scenes.emplace_back( std::make_unique<DoubleCubeScene>( gfx ) );
+	scenes.emplace_back( std::make_unique<PlaneWaveScene>( gfx ) );
+	scenes.emplace_back( std::make_unique<CubeSceneVertexColor>( gfx ) );
 
 	i = scenes.begin();
 }
