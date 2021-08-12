@@ -19,6 +19,17 @@ public:
 public:
 	// shaders
 
+	// returns the color stored at the given vertex
+	class PixelShader
+	{
+	public:
+		template <class Input>
+		Color operator()(const Input& v)
+		{
+			return Color( v.color );
+		}
+	};
+	// assigns color value to vertex based on it's position
 	class VertexShader
 	{
 	public:
@@ -109,17 +120,11 @@ public:
 		Mat3 rotation;
 		Vec3 translation;
 	};
-
-	class PixelShader
-	{
-	public:
-		Color operator()( const VertexShader::Output& v )
-		{
-			return Color( v.color );
-		}
-	};
+	// default required by the pipeline, does nothing
+	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 
 public:
 	PixelShader ps;
 	VertexShader vs;
+	GeometryShader gs;
 };

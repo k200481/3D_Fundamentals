@@ -3,6 +3,7 @@
 #include "Vec3.h"
 #include "Graphics.h"
 #include "DefaultVertexShader.h"
+#include "DefaultGeometryShader.h"
 
 class SolidColorEffect
 {
@@ -68,10 +69,11 @@ public:
 		Vec3 pos;
 		Color color;
 	};
-	typedef DefaultVertexShader<Vertex> VertexShader;
-
+	
 public:
-	//
+	// shaders
+
+	// returs color stored at the vertex
 	class PixelShader
 	{
 	public:
@@ -80,8 +82,13 @@ public:
 			return v.color;
 		}
 	};
+	// default required by the pipeline, does nothing
+	typedef DefaultVertexShader<Vertex> VertexShader;
+	// default required by the pipeline, does nothing
+	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 
 public:
 	PixelShader ps;
 	VertexShader vs;
+	GeometryShader gs;
 };

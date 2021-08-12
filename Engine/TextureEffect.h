@@ -6,6 +6,7 @@
 #include <string>
 
 #include "DefaultVertexShader.h"
+#include "DefaultGeometryShader.h"
 
 class TextureEffect
 {
@@ -75,9 +76,13 @@ public:
 		Vec3 pos;
 		Vec2 t;
 	};
-	typedef DefaultVertexShader<Vertex> VertexShader;
+
 public:
-	// 
+	// shaders
+
+	// performs lookup on the texture using given coordinates
+	// returns texture coordinates
+	// clamps texture coordinates if out of range
 	class PixelShader
 	{
 	public:
@@ -103,8 +108,13 @@ public:
 		float texClamp_x = 0;
 		float texClamp_y = 0;
 	};
+	// default required by the pipeline, does nothing
+	typedef DefaultVertexShader<Vertex> VertexShader;
+	// default required by the pipeline, does nothing
+	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 
 public:
 	PixelShader ps;
 	VertexShader vs;
+	GeometryShader gs;
 };

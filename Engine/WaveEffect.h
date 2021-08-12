@@ -73,7 +73,9 @@ public:
 		Vec3 pos;
 		Vec2 t;
 	};
-
+	// performs lookup on the texture using given coordinates
+	// returns texture coordinates
+	// clamps texture coordinates if out of range
 	class PixelShader
 	{
 	public:
@@ -99,7 +101,7 @@ public:
 		float texClamp_x = 0;
 		float texClamp_y = 0;
 	};
-
+	// transforms given vertices to generate a wave-like effect
 	class VertexShader
 	{
 	public:
@@ -134,8 +136,11 @@ public:
 		static constexpr float k = 2.0f * PI / waveLen;
 		static constexpr float a = 0.05f;
 	};
+	// default required by the pipeline, does nothing
+	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 
 public:
 	PixelShader ps;
 	VertexShader vs;
+	GeometryShader gs;
 };
