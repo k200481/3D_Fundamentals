@@ -73,9 +73,9 @@ public:
 		Vec3 pos;
 		Vec2 t;
 	};
-	// performs lookup on the texture using given coordinates
-	// returns texture coordinates
+	// performs lookup on the texture using given coordinates to get pixel
 	// clamps texture coordinates if out of range
+	// applies lighting effect to the pixel
 	class PixelShader
 	{
 	public:
@@ -87,7 +87,7 @@ public:
 				(int)std::min(in.t.y * texHeight, texClamp_y)
 			) );
 			
-			return Color( c * in.l );
+			return Color( c.GetHadamard( in.l ) );
 		}
 		void BindTexture(std::wstring filename)
 		{
@@ -139,7 +139,8 @@ public:
 		static constexpr float k = 2.0f * PI / waveLen;
 		static constexpr float a = 0.05f;
 	};
-	// default required by the pipeline, does nothing
+	// applies lighting effect to triangles 
+	// based on the dot product of their normals and uniform light rays
 	class GeometryShader
 	{
 	public:
@@ -160,7 +161,7 @@ public:
 				t(src.t),
 				l(l)
 			{}
-			Output(const Vec3& pos, const Vec2& t, float l)
+			Output(const Vec3& pos, const Vec2& t, const Vec3& l)
 				:
 				pos(pos),
 				t(t),
@@ -209,12 +210,12 @@ public:
 		public:
 			Vec3 pos;
 			Vec2 t;
-			float l;
+			Vec3 l;
 		};
 	public:
 		void SetLightDirection(const Vec3& dir_in)
 		{
-			lightDir = dir_in;
+			lightDir = dir_in.GetNormalized();
 		}
 		void SetLightColor(Color c)
 		{
@@ -224,19 +225,17 @@ public:
 		{
 			ambient = Vec3(c) / 255.0f;
 		}
-		void SetMaterialColor(Color c)
-		{
-			color = Vec3(c) / 255.0f;
-		}
 
 		Triangle<Output> operator()(const Vertex& v0, const Vertex& v1, const Vertex& v2, size_t triangle_id) const
 		{
 			// plane normal
 			const auto crossP = ((v1.pos - v0.pos) % (v2.pos - v0.pos)).GetNormalized();
-			const auto d = std::fmax(0.0f, -crossP * lightDir);
-			//Color c = Color(color.GetHadamard(d + ambient).Saturate() * 255.0f);
+			// dot product of plane normal and light rays
+			const auto dotP = std::fmax(0.0f, -crossP * lightDir);
+			// light intensity ( as a vector of the three primary colors )
+			const auto l = lightCol * dotP + ambient;
 
-			return { { v0.pos, v0.t, d }, { v1.pos, v1.t, d }, { v2.pos, v2.t, d } };
+			return { { v0.pos, v0.t, l }, { v1.pos, v1.t, l }, { v2.pos, v2.t, l } };
 		}
 
 	private:
@@ -246,8 +245,6 @@ public:
 		Vec3 lightCol = { 1.0f, 1.0f, 1.0f };
 		// the 'color' of the ambient light
 		Vec3 ambient = { 0.1f, 0.1f, 0.1f };
-		// material color
-		Vec3 color = { 1.0f, 1.0f, 1.0f };
 	};
 
 public:
