@@ -6,10 +6,12 @@
 #include "tiny_obj_loader.h"
 #include <stdexcept>
 #include <sstream>
+#include "Miniball.h"
 
 template <typename T>
 struct IndexedTriangleList
 {
+	IndexedTriangleList() = default;
 	IndexedTriangleList( std::vector<T> vertices_in, std::vector<size_t> indices_in )
 		:
 		vertices( std::move(vertices_in) ),
@@ -18,8 +20,8 @@ struct IndexedTriangleList
 		assert( vertices.size() > 2 );
 		assert( indices.size() % 3 == 0 );
 	}
-
-	static IndexedTriangleList<T> LoadFromFile( const std::wstring& filename )
+	// load an indexed triangle list from an object file
+	static IndexedTriangleList<T> LoadFromFile( const std::string& filename )
 	{
 		IndexedTriangleList<T> itlist;
 
@@ -51,11 +53,11 @@ struct IndexedTriangleList
 		}
 		else if ( !returnVal )
 		{
-			throw std::runtime_error( "LoadObj returned false\nFile: " + filename.c_str() );
+			throw std::runtime_error( "LoadObj returned false\nFile: " + filename );
 		}
 		else if ( shapes.size() == 0u )
 		{
-			throw std::runtime_error( "File " + filename.c_str() + " contains no shapes" );
+			throw std::runtime_error( "File " + filename + " contains no shapes" );
 		}
 
 		// extract vertices
@@ -77,7 +79,7 @@ struct IndexedTriangleList
 		for ( size_t f = 0; f < mesh.num_face_vertices.size(); f++  )
 		{
 			// check if face has the right number of faces
-			if ( mesh.num_face_vertices[i] != 3u )
+			if ( mesh.num_face_vertices[f] != 3u )
 			{
 				std::ostringstream oss;
 				oss << "Face #" << f << " has " << mesh.num_face_vertices[f] << " faces";
@@ -87,7 +89,7 @@ struct IndexedTriangleList
 			for ( size_t i = 0; i < 3u; i++ )
 			{
 				const auto idx = mesh.indices[f * 3u + i];
-				itlist.indices.emplace_back( idx.vertex_index() );
+				itlist.indices.push_back( size_t( idx.vertex_index ) );
 			}
 
 			if ( isCCW )
@@ -97,7 +99,40 @@ struct IndexedTriangleList
 			}
 
 		}
-		return itlistl
+		return itlist;
+	}
+	// 
+	void AdjustToTrueCenter()
+	{
+		struct VertexAccessor
+		{
+			typedef std::vector<T>::const_iterator Pit;
+			typedef const float* Cit;
+			Cit operator()( Pit it ) const
+			{
+				return &(it->pos.x);
+			}
+		};
+
+		Miniball::Miniball<VertexAccessor> mb( 3, vertices.cbegin(), vertices.cend() );
+		
+		const auto pc = mb.center();
+		const Vec3 center = Vec3{ pc[0], pc[1], pc[2] };
+
+		for ( auto& v : vertices )
+		{
+			v -= center;
+		}
+	}
+
+	float GetRadius() const
+	{
+		// return the distance of the farthest vertex from origin
+		return std::max_element( vertices.cbegin(), vertices.cend(), 
+			[]( const T& v0, const T& v1  ) {
+				return v0.pos.LenSq() < v1.pos.LenSq();
+			}
+		)->pos.Len();
 	}
 
 	std::vector<T> vertices;
