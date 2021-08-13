@@ -152,6 +152,9 @@
     <ClInclude Include="DefaultVertexShader.h" />
     <ClInclude Include="DoubleCubeScene.h" />
     <ClInclude Include="DXErr.h" />
+    <ClInclude Include="FlatGeometryEffect.h" />
+    <ClInclude Include="FlatVertexEffect.h" />
+    <ClInclude Include="FlatVertexScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />

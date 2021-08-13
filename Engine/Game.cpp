@@ -29,6 +29,7 @@
 #include "PlaneWaveScene.h"
 #include "CubeSceneVertexColor.h"
 #include "CubeSceneSolidGeometry.h"
+#include "FlatVertexScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -42,6 +43,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<PlaneWaveScene>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneVertexColor>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolidGeometry>( gfx ) );
+	scenes.emplace_back( std::make_unique<FlatVertexScene>( gfx ) );
 
 	i = scenes.begin();
 }

@@ -197,6 +197,85 @@ public:
 		};
 	}
 
+	template <typename Vertex>
+	static IndexedTriangleList<Vertex> GetPlainIndependentFacesNormals( float size = 1.0f )
+	{
+		const float side = size / 2.0f;
+
+		std::vector<Vertex> vertices( 24 );
+		
+		// front face
+		vertices[0].pos = { -side,  side, -side }; // 0
+		vertices[1].pos = {  side,  side, -side }; // 3
+		vertices[2].pos = {  side, -side, -side }; // 7
+		vertices[3].pos = { -side, -side, -side }; // 4
+		vertices[0].n = { 0.0f, 0.0f, -1.0f };
+		vertices[1].n = { 0.0f, 0.0f, -1.0f };
+		vertices[2].n = { 0.0f, 0.0f, -1.0f };
+		vertices[3].n = { 0.0f, 0.0f, -1.0f };
+
+		// back face
+		vertices[4].pos = {  side,  side,  side }; // 2
+		vertices[5].pos = { -side,  side,  side }; // 1
+		vertices[6].pos = { -side, -side,  side }; // 5
+		vertices[7].pos = {  side, -side,  side }; // 6
+		vertices[4].n = { 0.0f, 0.0f, 1.0f };
+		vertices[5].n = { 0.0f, 0.0f, 1.0f };
+		vertices[6].n = { 0.0f, 0.0f, 1.0f };
+		vertices[7].n = { 0.0f, 0.0f, 1.0f };
+
+		// right face
+		vertices[8].pos = {  side,  side, -side }; // 3
+		vertices[9].pos = {  side,  side,  side }; // 2
+		vertices[10].pos = {  side, -side,  side }; // 6
+		vertices[11].pos = {  side, -side, -side }; // 7
+		vertices[8].n = { 1.0f, 0.0f, 0.0f };
+		vertices[9].n = { 1.0f, 0.0f, 0.0f };
+		vertices[10].n = { 1.0f, 0.0f, 0.0f };
+		vertices[11].n = { 1.0f, 0.0f, 0.0f };
+
+		// left face
+		vertices[12].pos = { -side,  side,  side }; // 1
+		vertices[13].pos = { -side,  side, -side }; // 0
+		vertices[14].pos = { -side, -side, -side }; // 4
+		vertices[15].pos = { -side, -side,  side }; // 5
+		vertices[12].n = { -1.0f, 0.0f, 0.0f };
+		vertices[13].n = { -1.0f, 0.0f, 0.0f };
+		vertices[14].n = { -1.0f, 0.0f, 0.0f };
+		vertices[15].n = { -1.0f, 0.0f, 0.0f };
+
+		// top face
+		vertices[16].pos = { -side,  side, -side }; // 0
+		vertices[17].pos = { -side,  side,  side }; // 1
+		vertices[18].pos = {  side,  side,  side }; // 2
+		vertices[19].pos = {  side,  side, -side }; // 3
+		vertices[16].n = { 0.0f, 1.0f, 0.0f };
+		vertices[17].n = { 0.0f, 1.0f, 0.0f };
+		vertices[18].n = { 0.0f, 1.0f, 0.0f };
+		vertices[19].n = { 0.0f, 1.0f, 0.0f };
+
+		// bottom face
+		vertices[20].pos = { -side, -side, -side }; // 4
+		vertices[21].pos = {  side, -side, -side }; // 7
+		vertices[22].pos = {  side, -side,  side }; // 6
+		vertices[23].pos = { -side, -side,  side }; // 5
+		vertices[20].n = { 0.0f, -1.0f, 0.0f };
+		vertices[21].n = { 0.0f, -1.0f, 0.0f };
+		vertices[22].n = { 0.0f, -1.0f, 0.0f };
+		vertices[23].n = { 0.0f, -1.0f, 0.0f };
+
+		return {
+			vertices, {
+				0,1,2 , 0,2,3, // front face
+				4,5,6 , 4,6,7, // back face
+				8,9,10 , 8,10,11, // right face
+				12,13,14 , 12,14,15, // left face
+				16,17,18 , 16,18,19, // top face
+				20,21,22 , 20,22,23 // bottom face
+			}
+		};
+	}
+
 private:
 	std::vector<Vec3> vertices;
 	const float side;
