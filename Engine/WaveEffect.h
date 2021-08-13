@@ -79,12 +79,15 @@ public:
 	class PixelShader
 	{
 	public:
-		Color operator()(const Vertex& v)
+		template <class Input>
+		Color operator()(const Input& in)
 		{
-			return pTex->GetPixel(
-				(int)std::min(v.t.x * texWidth, texClamp_x),
-				(int)std::min(v.t.y * texHeight, texClamp_y)
-			);
+			Vec3 c = Vec3( pTex->GetPixel(
+				(int)std::min(in.t.x * texWidth, texClamp_x),
+				(int)std::min(in.t.y * texHeight, texClamp_y)
+			) );
+			
+			return Color( c * in.l );
 		}
 		void BindTexture(std::wstring filename)
 		{
@@ -137,7 +140,115 @@ public:
 		static constexpr float a = 0.05f;
 	};
 	// default required by the pipeline, does nothing
-	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
+	class GeometryShader
+	{
+	public:
+		// the vertex output by this shader
+		class Output
+		{
+		public:
+			Output() = default;
+			Output(const Vec3& pos)
+				:
+				pos(pos)
+			{}
+			// this enables template functions clone a vertex
+			// while changing the pos only
+			Output(const Vec3& pos, const Output& src)
+				:
+				pos(pos),
+				t(src.t),
+				l(l)
+			{}
+			Output(const Vec3& pos, const Vec2& t, float l)
+				:
+				pos(pos),
+				t(t),
+				l(l)
+			{}
+			Output& operator+=(const Output& rhs)
+			{
+				pos += rhs.pos;
+				t += rhs.t;
+				return *this;
+			}
+			Output operator+(const Output& rhs) const
+			{
+				return Output(*this) += rhs;
+			}
+			Output& operator-=(const Output& rhs)
+			{
+				pos -= rhs.pos;
+				t -= rhs.t;
+				return *this;
+			}
+			Output operator-(const Output& rhs) const
+			{
+				return Output(*this) -= rhs;
+			}
+			Output& operator*=(float rhs)
+			{
+				pos *= rhs;
+				t *= rhs;
+				return *this;
+			}
+			Output operator*(float rhs) const
+			{
+				return Output(*this) *= rhs;
+			}
+			Output& operator/=(float rhs)
+			{
+				pos /= rhs;
+				t /= rhs;
+				return *this;
+			}
+			Output operator/(float rhs) const
+			{
+				return Output(*this) /= rhs;
+			}
+		public:
+			Vec3 pos;
+			Vec2 t;
+			float l;
+		};
+	public:
+		void SetLightDirection(const Vec3& dir_in)
+		{
+			lightDir = dir_in;
+		}
+		void SetLightColor(Color c)
+		{
+			lightCol = Vec3(c) / 255.0f;
+		}
+		void SetAmbientLight(Color c)
+		{
+			ambient = Vec3(c) / 255.0f;
+		}
+		void SetMaterialColor(Color c)
+		{
+			color = Vec3(c) / 255.0f;
+		}
+
+		Triangle<Output> operator()(const Vertex& v0, const Vertex& v1, const Vertex& v2, size_t triangle_id) const
+		{
+			// plane normal
+			const auto crossP = ((v1.pos - v0.pos) % (v2.pos - v0.pos)).GetNormalized();
+			const auto d = std::fmax(0.0f, -crossP * lightDir);
+			//Color c = Color(color.GetHadamard(d + ambient).Saturate() * 255.0f);
+
+			return { { v0.pos, v0.t, d }, { v1.pos, v1.t, d }, { v2.pos, v2.t, d } };
+		}
+
+	private:
+		// light information
+		Vec3 lightDir = Vec3{ -1.0f, 0.0f, 1.0f }.GetNormalized();
+		// the 'color' of the light
+		Vec3 lightCol = { 1.0f, 1.0f, 1.0f };
+		// the 'color' of the ambient light
+		Vec3 ambient = { 0.1f, 0.1f, 0.1f };
+		// material color
+		Vec3 color = { 1.0f, 1.0f, 1.0f };
+	};
 
 public:
 	PixelShader ps;
