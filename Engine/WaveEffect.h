@@ -85,9 +85,9 @@ public:
 			Vec3 c = Vec3( pTex->GetPixel(
 				(int)std::min(in.t.x * texWidth, texClamp_x),
 				(int)std::min(in.t.y * texHeight, texClamp_y)
-			) );
-			
-			return Color( c.GetHadamard( in.l ) );
+			) ) / 255.0f;
+
+			return Color( c.GetHadamard( in.l ).Saturate() * 255.0f );
 		}
 		void BindTexture(std::wstring filename)
 		{

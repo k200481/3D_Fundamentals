@@ -74,6 +74,9 @@ public:
 		pipeline.effect.vs.BindRotation( m );
 		pipeline.effect.vs.BindTranslation( v );
 
+		pipeline.effect.gs.SetLightColor( Color(Vec3( 0.5f, 0.5f, 1.0f ) * 255.0f) );
+		pipeline.effect.gs.SetAmbientLight( Color(Vec3( 0.5f, 0.5f, 1.0f ) * 25.5f) );
+
 		pipeline.Draw( itList );
 	}
 
