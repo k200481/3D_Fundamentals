@@ -47,7 +47,7 @@ struct IndexedTriangleList
 		const bool returnVal = tinyobj::LoadObj( &attrib, &shapes, nullptr, &err, filename.c_str() );
 
 		// check for errors
-		if ( !err.empty() && err.substr(0, 4) == "WARN" )
+		if ( !err.empty() && err.substr(0, 4) != "WARN" )
 		{
 			throw std::runtime_error( "LoadObj returned error: " + err + "\nFile: " + filename.c_str() );
 		}
@@ -128,7 +128,7 @@ struct IndexedTriangleList
 		const bool returnVal = tinyobj::LoadObj( &attrib, &shapes, nullptr, &err, filename.c_str() );
 
 		// check for errors
-		if ( !err.empty() && err.substr(0, 4) == "WARN" )
+		if ( !err.empty() && err.substr(0, 4) != "WARN" )
 		{
 			throw std::runtime_error( "LoadObj returned error: " + err + "\nFile: " + filename.c_str() );
 		}
@@ -172,10 +172,10 @@ struct IndexedTriangleList
 				const auto idx = mesh.indices[f * 3u + i];
 				itlist.indices.push_back( size_t( idx.vertex_index ) );
 
-				itlist.vertices[idx.vertex_index].n = Vec3{
-					attrib.normals[idx.normal_index + 0],
-					attrib.normals[idx.normal_index + 1],
-					attrib.normals[idx.normal_index + 2]
+				itlist.vertices[(size_t)idx.vertex_index].n = Vec3{
+					attrib.normals[3 * idx.normal_index + 0],
+					attrib.normals[3 * idx.normal_index + 1],
+					attrib.normals[3 * idx.normal_index + 2]
 				};
 			}
 
