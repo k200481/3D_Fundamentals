@@ -53,6 +53,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, Sphere::GetNormals<GouraudEffect::Vertex>( 1.0f, 40u, 40u ) ) );
 	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, IndexedTriangleList<GouraudEffect::Vertex>::LoadNormals("suzanne.obj")));
 	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Sphere::GetNormals<GouraudPointEffect::Vertex>( 1.0f, 40, 40 ) ) );
+	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Cube::GetPlainIndependentFacesNormals<GouraudPointEffect::Vertex>() ) );
 
 	i = scenes.begin();
 }
