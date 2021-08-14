@@ -50,6 +50,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx, IndexedTriangleList<FlatGeometryEffect::Vertex>::LoadFromFile( "bunny.obj" )));
 	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx, Sphere::GetPlain<FlatGeometryEffect::Vertex>( 1.0f, 40u, 40u ) ) );
 	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, Sphere::GetNormals<GouraudEffect::Vertex>( 1.0f, 40u, 40u ) ) );
+	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, IndexedTriangleList<GouraudEffect::Vertex>::LoadNormals("suzanne.obj")));
 
 	i = scenes.begin();
 }
