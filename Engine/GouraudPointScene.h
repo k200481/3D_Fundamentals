@@ -19,7 +19,7 @@ public:
 		pipeline( gfx, pZBuf ),
 		liPipeline( gfx, pZBuf ),
 		itlist( std::move( itlist_in ) ),
-		li_itlist( Sphere::GetPlain<LiVertex>( 0.1f, 30, 30 ) )
+		li_itlist( Sphere::GetPlain<LiVertex>( 0.05f, 30, 30 ) )
 	{
 		itlist.AdjustToTrueCenter();
 		zOffset = itlist.GetRadius() * 1.6f;
