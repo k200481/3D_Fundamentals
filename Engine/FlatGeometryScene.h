@@ -27,13 +27,13 @@ public:
 
 		pipeline.effect.vs.BindRotation( rot );
 		pipeline.effect.vs.BindTranslation( tl );
-		pipeline.effect.gs.SetLightDirection( { 0.0f, -1.0f, -1.0f } );
-		pipeline.effect.gs.SetMaterialColor( Colors::Yellow );
+		pipeline.effect.gs.SetLightDirection( { 0.0f, -1.0f, 1.0f } );
+		pipeline.effect.gs.SetMaterialColor( Color( Vec3( 0.85f, 0.9f, 0.85f ) * 255.0f * 0.9 ) );
 
-		const Vec3 light = Vec3{ 1.0f, 0.5f, 0.5f } * 255.0f;
+		const Vec3 light = Vec3{ 1.0f, 1.0f, 1.0f } * 255.0f;
 
 		pipeline.effect.gs.SetLightColor( Color( light ) );
-		pipeline.effect.gs.SetAmbientLight( Color( light * 0.1 ) );
+		pipeline.effect.gs.SetAmbientLight( Color( light * 0.01 ) );
 		
 		pipeline.Draw( itlist );
 	}

@@ -31,6 +31,8 @@
 #include "CubeSceneSolidGeometry.h"
 #include "FlatVertexScene.h"
 #include "FlatGeometryScene.h"
+#include "Sphere.h"
+#include "GouraudScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -46,6 +48,8 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<CubeSceneSolidGeometry>( gfx ) );
 	scenes.emplace_back( std::make_unique<FlatVertexScene>( gfx ) );
 	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx, IndexedTriangleList<FlatGeometryEffect::Vertex>::LoadFromFile( "bunny.obj" )));
+	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx, Sphere::GetPlain<FlatGeometryEffect::Vertex>( 1.0f, 40u, 40u ) ) );
+	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, Sphere::GetNormals<GouraudEffect::Vertex>( 1.0f, 40u, 40u ) ) );
 
 	i = scenes.begin();
 }
