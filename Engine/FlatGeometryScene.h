@@ -9,10 +9,10 @@ class FlatGeometryScene : public CubeScene
 	typedef Pipeline<FlatGeometryEffect> Pipeline;
 	typedef Pipeline::Vertex Vertex;
 public:
-	FlatGeometryScene( Graphics& gfx )
+	FlatGeometryScene( Graphics& gfx, IndexedTriangleList<Vertex> itlist_in )
 		:
 		pipeline( gfx ),
-		itlist( IndexedTriangleList<Vertex>::LoadFromFile("bunny.obj") )
+		itlist( std::move( itlist_in ) )
 	{
 		itlist.AdjustToTrueCenter();
 		zOffset = itlist.GetRadius() * 1.6f;

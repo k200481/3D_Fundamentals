@@ -45,7 +45,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<CubeSceneVertexColor>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolidGeometry>( gfx ) );
 	scenes.emplace_back( std::make_unique<FlatVertexScene>( gfx ) );
-	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx ) );
+	scenes.emplace_back( std::make_unique<FlatGeometryScene>( gfx, IndexedTriangleList<FlatGeometryEffect::Vertex>::LoadFromFile( "bunny.obj" )));
 
 	i = scenes.begin();
 }

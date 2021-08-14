@@ -25,6 +25,15 @@
     <Filter Include="Header Files\Scenes\Cube Scenes">
       <UniqueIdentifier>{02908a49-e010-4f43-b468-6e771e59082d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{e1fa6b56-c5c9-4236-879e-ef6af4a9c46f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Libraries">
+      <UniqueIdentifier>{0953c8f6-76ae-4d8d-9c5b-7f585d78db9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DefaultShaders">
+      <UniqueIdentifier>{6a367ff3-8f85-4c71-a2ec-62f2a7e6083d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -81,9 +90,6 @@
     <ClInclude Include="Mat3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedLineList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -103,9 +109,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultVertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColorBlendEffect.h">
@@ -141,17 +144,11 @@
     <ClInclude Include="PlaneWaveScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CubeSceneVertexColor.h">
       <Filter>Header Files\Scenes\Cube Scenes</Filter>
     </ClInclude>
     <ClInclude Include="VertexColorEffect.h">
       <Filter>Header Files\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="DefaultGeometryShader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SolidGeometryEffect.h">
       <Filter>Header Files\Effects</Filter>
@@ -171,11 +168,23 @@
     <ClInclude Include="FlatGeometryScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Libraries</Filter>
     </ClInclude>
     <ClInclude Include="Miniball.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultGeometryShader.h">
+      <Filter>Header Files\DefaultShaders</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultVertexShader.h">
+      <Filter>Header Files\DefaultShaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
