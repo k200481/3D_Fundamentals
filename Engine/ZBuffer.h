@@ -52,6 +52,15 @@ public:
 		return false;
 	}
 
+	size_t GetWidth() const
+	{
+		return width;
+	}
+	size_t GetHeight() const
+	{
+		return height;
+	}
+
 private:
 	std::unique_ptr<float[]> pBuf;
 	const size_t width;
