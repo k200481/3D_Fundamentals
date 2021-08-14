@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "ZBuffer.h"
+#include <memory>
 
 template <typename Effect>
 class Pipeline
@@ -21,11 +22,18 @@ public:
 	Pipeline(Graphics& gfx)
 		:
 		gfx(gfx),
-		zBuf( Graphics::ScreenWidth, Graphics::ScreenHeight )
+		pZBuf( std::make_shared<ZBuffer>( Graphics::ScreenWidth, Graphics::ScreenHeight ) )
 	{}
+	Pipeline( Graphics& gfx, std::shared_ptr<ZBuffer> pZBuf_in )
+		:
+		gfx( gfx ),
+		pZBuf( std::move(pZBuf_in) )
+	{
+		assert( pZBuf->GetWidth() == gfx.ScreenWidth && pZBuf->GetHeight() == gfx.ScreenHeight );
+	}
 	void BeginScene()
 	{
-		zBuf.Clear();
+		pZBuf->Clear();
 	}
 	void Draw(const IndexedTriangleList<Vertex>& triList)
 	{
@@ -184,7 +192,7 @@ private:
 			{
 				// z actually stores zInv
 				const float z = 1.0f / tc.pos.z;
-				if ( zBuf.TestAndSet( x, y, z ) )
+				if ( pZBuf->TestAndSet( x, y, z ) )
 				{
 					// recover the coordinate in object space 
 					// (technically world space since they are trandformed and rotated)
@@ -204,5 +212,5 @@ public:
 private:
 	Graphics& gfx;
 	CoordinateTransformer ct;
-	ZBuffer zBuf;
+	std::shared_ptr<ZBuffer> pZBuf;
 };
