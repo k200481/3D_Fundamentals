@@ -56,6 +56,17 @@ public:
 	}
 
 	template <class Vertex>
+	static IndexedTriangleList<Vertex> GetNormals( int divisions = 7, float size = 1.0f )
+	{
+		auto tl = GetPlain<Vertex>( divisions, size );
+		for ( auto& v : tl.vertices )
+		{
+			v.n = { 0.0f, 0.0f, -1.0f };
+		}
+		return std::move(tl);
+	}
+
+	template <class Vertex>
 	static IndexedTriangleList<Vertex> GetSkinned( int divisions = 7, float size = 1.0f )
 	{
 		auto triangles = GetPlain<Vertex>( divisions, size );
