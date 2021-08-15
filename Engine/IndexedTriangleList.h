@@ -173,9 +173,9 @@ struct IndexedTriangleList
 				itlist.indices.push_back( size_t( idx.vertex_index ) );
 
 				itlist.vertices[(size_t)idx.vertex_index].n = Vec3{
-					attrib.normals[3 * idx.normal_index + 0],
-					attrib.normals[3 * idx.normal_index + 1],
-					attrib.normals[3 * idx.normal_index + 2]
+					attrib.normals[3 * (size_t)idx.normal_index + 0],
+					attrib.normals[3 * (size_t)idx.normal_index + 1],
+					attrib.normals[3 * (size_t)idx.normal_index + 2]
 				};
 			}
 

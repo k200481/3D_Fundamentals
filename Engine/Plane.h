@@ -63,7 +63,7 @@ public:
 		{
 			v.n = { 0.0f, 0.0f, -1.0f };
 		}
-		return std::move(tl);
+		return tl;
 	}
 
 	template <class Vertex>

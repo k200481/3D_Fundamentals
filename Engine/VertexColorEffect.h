@@ -117,7 +117,7 @@ public:
 		}
 
 	private:
-		Mat3 rotation;
+		Mat3 rotation = Mat3::Identity();
 		Vec3 translation;
 	};
 	// default required by the pipeline, does nothing

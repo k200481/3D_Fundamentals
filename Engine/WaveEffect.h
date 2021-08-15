@@ -129,9 +129,9 @@ public:
 			return Output( pos, in.t );
 		}
 	private:
-		Mat3 rotation;
+		Mat3 rotation = Mat3::Identity();
 		Vec3 translation;
-		float time;
+		float time = 0.0f;
 		// time period of wave in seconds
 		static constexpr float freq = 1.0f;
 		static constexpr float waveLen = 0.5f;

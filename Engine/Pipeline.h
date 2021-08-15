@@ -146,7 +146,7 @@ private:
 		const auto di1 = ( it2 - it1 ) / dy;
 
 		// right edge, starts at v1 in this case
-		const auto itEdge1 = it1;
+		const auto& itEdge1 = it1;
 
 		DrawFlatTriangle( it0, it1, it2, di0, di1, itEdge1 );
 	}

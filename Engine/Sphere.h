@@ -101,7 +101,7 @@ public:
 		itlist.indices.push_back( GetIndex( latDiv - 2u, 0 ) );
 		itlist.indices.push_back( GetIndex( latDiv - 2u, longDiv - 1u ) );
 
-		return std::move( itlist );
+		return itlist;
 	}
 	template <class Vertex>
 	static IndexedTriangleList<Vertex> GetNormals( float radius, size_t latDive, size_t longDiv )

@@ -24,6 +24,6 @@ public:
 		return Output( pos, in );
 	}
 private:
-	Mat3 rotation;
+	Mat3 rotation = Mat3::Identity();
 	Vec3 translation;
 };
