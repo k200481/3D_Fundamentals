@@ -34,6 +34,7 @@
 #include "Sphere.h"
 #include "GouraudScene.h"
 #include "GouraudPointScene.h"
+#include "GouraudBunnyScene.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -54,6 +55,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<GouraudScene>( gfx, IndexedTriangleList<GouraudEffect::Vertex>::LoadNormals("suzanne.obj")));
 	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Sphere::GetNormals<GouraudPointEffect::Vertex>( 1.0f, 40, 40 ) ) );
 	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Cube::GetPlainIndependentFacesNormals<GouraudPointEffect::Vertex>() ) );
+	scenes.emplace_back( std::make_unique<GouraudBunnyScene>( gfx ) );
 
 	i = scenes.begin();
 }
