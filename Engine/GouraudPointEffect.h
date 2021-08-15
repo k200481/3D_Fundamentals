@@ -230,8 +230,8 @@ public:
 		Vec3 color = Vec3{ 0.85f, 0.9f, 0.85f } *0.8;
 
 		float quadraticAttennuation = 1.0f;
-		float linearAttennuation = 1.0f;
-		float constantAttennuation = 1.0f;
+		float linearAttennuation = 2.619f;
+		float constantAttennuation = 0.382f;
 	};
 
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
