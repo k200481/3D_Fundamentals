@@ -89,7 +89,7 @@ public:
 			return {
 				 cosTheta,	sinTheta, (T)0.0, (T)0.0,
 				-sinTheta,	cosTheta, (T)0.0, (T)0.0,
-				 (T)0.0,	(T)0.0,	  (T)1.0  (T)0.0,
+				 (T)0.0,	(T)0.0,	  (T)1.0, (T)0.0,
 				 (T)0.0,	(T)0.0,	  (T)0.0, (T)1.0
 			};
 		}

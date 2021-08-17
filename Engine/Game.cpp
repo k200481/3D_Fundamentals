@@ -42,6 +42,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, Sphere::GetNormals<SpecularPhongEffect::Vertex>(1.0f, 40, 40) ) );
 	scenes.emplace_back( std::make_unique<CubeSceneTex>( gfx, L"WoodTex.jpg" ) );
 	scenes.emplace_back( std::make_unique<CubeSceneColorBlend>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>( gfx ) );
@@ -59,7 +60,6 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Cube::GetPlainIndependentFacesNormals<PhongPointEffect::Vertex>() ) );
 	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Plane::GetNormals<PhongPointEffect::Vertex>(  ) ) );
 	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, IndexedTriangleList<SpecularPhongEffect::Vertex>::LoadNormals("suzanne.obj") ) );
-	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, Sphere::GetNormals<SpecularPhongEffect::Vertex>(1.0f, 40, 40) ) );
 
 	i = scenes.begin();
 }

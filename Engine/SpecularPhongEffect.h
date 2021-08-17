@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vec3.h"
+#include "Vec4.h"
 #include "Mat.h"
 #include "Colors.h"
 
@@ -223,29 +223,24 @@ public:
 				return Output(*this) /= rhs;
 			}
 		public:
-			Vec3 pos;
-			Vec3 n;
+			Vec4 pos;
+			Vec4 n;
 			Vec3 worldPos;
 		};
 	public:
-		void BindRotation(const Mat3& rotation_in)
+		void BindTransformation( const Mat4& transformation_in )
 		{
-			rotation = rotation_in;
-		}
-		void BindTranslation(const Vec3& translation_in)
-		{
-			translation = translation_in;
+			transformation = transformation_in;
 		}
 
 		Output operator()(const Vertex& in)
 		{
-			const auto pos = in.pos * rotation + translation;
-			return { pos, in.n * rotation, pos };
+			const auto pos = Vec4(in.pos) * transformation;
+			return { pos, Vec4(in.n, 0.0f) * transformation, (Vec3)pos };
 		}
 
 	private:
-		Mat3 rotation = Mat3::Identity();
-		Vec3 translation;
+		Mat4 transformation = Mat4::Identity();
 	};
 	// default does nothing
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;

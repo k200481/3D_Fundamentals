@@ -55,17 +55,15 @@ public:
 		pipeline.BeginScene();
 		liPipeline.BeginScene();
 
-		const Mat3 rot = Mat3::RotationX(theta_x) * Mat3::RotationY(theta_y) * Mat3::RotationZ(theta_z);
-		const Vec3 tl = { 0.0f, 0.0f, zOffset };
+		const Mat4 trans = Mat4::RotationX(theta_x) * Mat4::RotationY(theta_y) * Mat4::RotationZ(theta_z) * Mat4::Translation(0.0f,0.0f,zOffset);
 
-		pipeline.effect.vs.BindRotation(rot);
-		pipeline.effect.vs.BindTranslation(tl);
+		pipeline.effect.vs.BindTransformation(trans);
 		pipeline.effect.ps.SetLightPosition(lightPos);
 		pipeline.Draw(itlist);
 
 		liPipeline.effect.vs.BindRotation(Mat3::Identity());
 		liPipeline.effect.vs.BindTranslation(lightPos);
-		liPipeline.Draw(li_itlist);
+		//liPipeline.Draw(li_itlist);
 	}
 
 private:
