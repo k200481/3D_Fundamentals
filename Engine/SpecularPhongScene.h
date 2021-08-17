@@ -63,7 +63,7 @@ public:
 
 		liPipeline.effect.vs.BindRotation(Mat3::Identity());
 		liPipeline.effect.vs.BindTranslation(lightPos);
-		//liPipeline.Draw(li_itlist);
+		liPipeline.Draw(li_itlist);
 	}
 
 private:
