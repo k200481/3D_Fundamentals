@@ -61,6 +61,8 @@ public:
 		pipeline.effect.vs.BindRotation(rot);
 		pipeline.effect.vs.BindTranslation(tl);
 		pipeline.effect.ps.SetLightPosition(lightPos);
+		pipeline.effect.ps.SetLightColor(Color(Vec3({255.0f, 100.0f, 255.0f})));
+		//pipeline.effect.ps.SetMaterialColor(Color(Vec3{200.0f, 255.0f, 200.0f}));
 		pipeline.Draw(itlist);
 
 		liPipeline.effect.vs.BindRotation(Mat3::Identity());
