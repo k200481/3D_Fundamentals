@@ -20,7 +20,7 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "Mat3.h"
+#include "Mat.h"
 
 #include "CubeSceneTex.h"
 #include "CubeSceneColorBlend.h"

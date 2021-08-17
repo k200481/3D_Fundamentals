@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 #include "CoordinateTransformer.h"
-#include "Mat3.h"
+#include "Mat.h"
 #include "Cube.h"
 
 class CubeScene : public Scene

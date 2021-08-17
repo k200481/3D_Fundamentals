@@ -5,7 +5,7 @@
 #include "Triangle.h"
 #include "IndexedTriangleList.h"
 #include "CoordinateTransformer.h"
-#include "Mat3.h"
+#include "Mat.h"
 #include <algorithm>
 
 #include "ZBuffer.h"

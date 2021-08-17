@@ -2,7 +2,7 @@
 
 #include "Vec3.h"
 #include "Colors.h"
-#include "Mat3.h"
+#include "Mat.h"
 
 class VertexColorEffect
 {
