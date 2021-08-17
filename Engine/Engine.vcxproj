@@ -177,8 +177,6 @@
     <ClInclude Include="Pipeline.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PlaneWaveScene.h" />
-    <ClInclude Include="RandomColorEffect.h" />
-    <ClInclude Include="RandomColorScene.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
