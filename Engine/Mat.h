@@ -212,6 +212,27 @@ public:
 		}
 	}
 
+	static _Mat ProjectionHFOV(T fov, T ar, T n, T f)
+	{
+		if constexpr (S == 4)
+		{
+			const T fov_rad = fov * (T)PI_D / (T)180.0;
+			const T w = (T)1.0 / std::tan(fov_rad / (T)2.0);
+			const T h = w * ar;
+
+			return {
+				w,		(T)0.0, (T)0.0,			  (T)0.0, 
+				(T)0.0, h,		(T)0.0,			  (T)0.0, 
+				(T)0.0, (T)0.0, f / (f - n),	  (T)1.0,
+				(T)0.0, (T)0.0, -n * f / (f - n), (T)0.0,
+			};
+		}
+		else
+		{
+			static_assert(false, "Bad Matrix Size");
+		}
+	}
+
 public:
 	// [ row ][ col ]
 	T elements[S][S];
