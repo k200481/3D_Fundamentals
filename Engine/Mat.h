@@ -67,7 +67,7 @@ public:
 		}
 		else
 		{
-			static_assert("Bad Matrix Size");
+			static_assert(false, "Bad Matrix Size");
 		}
 	}
 	
@@ -95,7 +95,7 @@ public:
 		}
 		else
 		{
-			static_assert("Bad Matrix Size");
+			static_assert(false, "Bad Matrix Size");
 		}
 	}
 	static _Mat RotationY(T theta)
@@ -122,7 +122,7 @@ public:
 		}
 		else
 		{
-			static_assert("Bad Matrix Size");
+			static_assert(false, "Bad Matrix Size");
 		}
 	}
 	static _Mat RotationX(T theta)
@@ -149,18 +149,25 @@ public:
 		}
 		else
 		{
-			static_assert("Bad Matrix Size");
+			static_assert(false, "Bad Matrix Size");
 		}
 	}
 
-	static _Mat Translation( T x, T y, T z )
+	static _Mat Translation(T x, T y, T z)
 	{
-		return {
-			(T)1.0,(T)0.0,(T)0.0,(T)0.0,
-			(T)0.0,(T)1.0,(T)0.0,(T)0.0,
-			(T)0.0,(T)0.0,(T)1.0,(T)0.0,
-			(T)x,  (T)y,  (T)z,  (T)1.0
-		};
+		if constexpr (S != 4)
+		{
+			static_assert(false, "Bad Matrix Size");
+		}
+		else
+		{
+			return {
+				(T)1.0,(T)0.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)1.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)0.0,(T)1.0,(T)0.0,
+				(T)x,  (T)y,  (T)z,  (T)1.0
+			};
+		}
 	}
 	
 	static _Mat Scaling(T factor)
@@ -184,7 +191,24 @@ public:
 		}
 		else
 		{
-			static_assert("Bad Matrix Size");
+			static_assert(false, "Bad Matrix Size");
+		}
+	}
+
+	static _Mat Projection(T w, T h, T n, T f)
+	{
+		if constexpr (S == 4)
+		{
+			return {
+				(T)2.0 * n / w, (T)0.0,			(T)0.0,			  (T)0.0, 
+				(T)0.0,			(T)2.0 * n / h,	(T)0.0,			  (T)0.0, 
+				(T)0.0,			(T)0.0,			f / (f - n),	  (T)1.0, 
+				(T)0.0,			(T)0.0,			-n * f / (f - n), (T)0.0, 
+			};
+		}
+		else
+		{
+			static_assert(false, "Bad Matrix Size");
 		}
 	}
 

@@ -22,19 +22,19 @@
 #include "Game.h"
 #include "Mat.h"
 
-#include "CubeSceneTex.h"
-#include "CubeSceneColorBlend.h"
-#include "CubeSceneSolid.h"
-#include "DoubleCubeScene.h"
-#include "PlaneWaveScene.h"
-#include "CubeSceneVertexColor.h"
-#include "CubeSceneSolidGeometry.h"
-#include "FlatVertexScene.h"
-#include "FlatGeometryScene.h"
-#include "Sphere.h"
-#include "GouraudScene.h"
-#include "GouraudPointScene.h"
-#include "PhongPointScene.h"
+//#include "CubeSceneTex.h"
+//#include "CubeSceneColorBlend.h"
+//#include "CubeSceneSolid.h"
+//#include "DoubleCubeScene.h"
+//#include "PlaneWaveScene.h"
+//#include "CubeSceneVertexColor.h"
+//#include "CubeSceneSolidGeometry.h"
+//#include "FlatVertexScene.h"
+//#include "FlatGeometryScene.h"
+//#include "Sphere.h"
+//#include "GouraudScene.h"
+//#include "GouraudPointScene.h"
+//#include "PhongPointScene.h"
 #include "SpecularPhongScene.h"
 
 Game::Game( MainWindow& wnd )
@@ -42,8 +42,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
-	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, Sphere::GetNormals<SpecularPhongEffect::Vertex>(1.0f, 40, 40) ) );
-	scenes.emplace_back( std::make_unique<CubeSceneTex>( gfx, L"WoodTex.jpg" ) );
+	/*scenes.emplace_back( std::make_unique<CubeSceneTex>( gfx, L"WoodTex.jpg" ) );
 	scenes.emplace_back( std::make_unique<CubeSceneColorBlend>( gfx ) );
 	scenes.emplace_back( std::make_unique<CubeSceneSolid>( gfx ) );
 	scenes.emplace_back( std::make_unique<DoubleCubeScene>( gfx ) );
@@ -58,7 +57,8 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Sphere::GetNormals<GouraudPointEffect::Vertex>( 1.0f, 40, 40 ) ) );
 	scenes.emplace_back( std::make_unique<GouraudPointScene>( gfx, Cube::GetPlainIndependentFacesNormals<GouraudPointEffect::Vertex>() ) );
 	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Cube::GetPlainIndependentFacesNormals<PhongPointEffect::Vertex>() ) );
-	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Plane::GetNormals<PhongPointEffect::Vertex>(  ) ) );
+	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Plane::GetNormals<PhongPointEffect::Vertex>(  ) ) );*/
+	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, Sphere::GetNormals<SpecularPhongEffect::Vertex>(1.0f, 40, 40) ) );
 	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, IndexedTriangleList<SpecularPhongEffect::Vertex>::LoadNormals("suzanne.obj") ) );
 
 	i = scenes.begin();

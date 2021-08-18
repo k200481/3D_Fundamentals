@@ -143,7 +143,7 @@
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="ColorBlendEffect.h" />
     <ClInclude Include="Colors.h" />
-    <ClInclude Include="CoordinateTransformer.h" />
+    <ClInclude Include="NDCScreenTransformer.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeSceneColorBlend.h" />
     <ClInclude Include="CubeSceneSolid.h" />

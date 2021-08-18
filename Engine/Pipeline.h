@@ -4,7 +4,7 @@
 #include "Graphics.h"
 #include "Triangle.h"
 #include "IndexedTriangleList.h"
-#include "CoordinateTransformer.h"
+#include "NDCScreenTransformer.h"
 #include "Mat.h"
 #include <algorithm>
 
@@ -64,8 +64,10 @@ private:
 			const auto& v0 = vertices[indices[i * 3]];
 			const auto& v1 = vertices[indices[i * 3 + 1]];
 			const auto& v2 = vertices[indices[i * 3 + 2]];
+			
+			const auto viewPos = Vec4(0.0f, 0.0f, 0.0f, 1.0f) * effect.vs.GetProjection();
 			// cull backfacing triangles with cross product (%) shenanigans
-			if ((v1.pos - v0.pos) % (v2.pos - v0.pos) * v0.pos <= 0.0f)
+			if ((v1.pos - v0.pos) % (v2.pos - v0.pos) * (v0.pos - viewPos) <= 0.0f)
 			{
 				// process 3 vertices into a triangle
 				ProcessTriangle( v0, v1, v2, i );
@@ -191,13 +193,13 @@ private:
 			for ( int x = xStart; x < xEnd; x++, tc += dt )
 			{
 				// z actually stores zInv
-				const float z = 1.0f / tc.pos.z;
-				if ( pZBuf->TestAndSet( x, y, z ) )
+				if ( pZBuf->TestAndSet( x, y, tc.pos.z ) )
 				{
+					const float w = 1.0f / tc.pos.w;
 					// recover the coordinate in object space 
 					// (technically world space since they are trandformed and rotated)
 					// can't use tc here because it is being added into
-					const auto v = tc * z;
+					const auto v = tc * w;
 					gfx.PutPixel(
 						x, y,
 						effect.ps( v )
@@ -211,6 +213,6 @@ public:
 	Effect effect;
 private:
 	Graphics& gfx;
-	CoordinateTransformer ct;
+	NDCScreenTransformer ct;
 	std::shared_ptr<ZBuffer> pZBuf;
 };

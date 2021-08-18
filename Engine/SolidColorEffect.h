@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Vec3.h"
+#include "Mat.h"
 #include "Graphics.h"
-#include "DefaultVertexShader.h"
 #include "DefaultGeometryShader.h"
 
 class SolidColorEffect
@@ -77,13 +77,106 @@ public:
 	class PixelShader
 	{
 	public:
-		Color operator()( const Vertex& v )
+		template <class Input>
+		Color operator()( const Input& in )
 		{
-			return v.color;
+			return in.c;
 		}
 	};
-	// default required by the pipeline, does nothing
-	typedef DefaultVertexShader<Vertex> VertexShader;
+
+	class VertexShader
+	{
+	public:
+		// output vertex
+		class Output
+		{
+		public:
+			Output() = default;
+			Output(const Vec4& pos)
+				:
+				pos(pos)
+			{
+			}
+			Output(const Vec4& pos, Color c)
+				:
+				pos(pos),
+				c(c)
+			{
+			}
+			Output(const Vec4& pos, const Output& src)
+				:
+				pos(pos),
+				c(src.c)
+			{
+			}
+			Output& operator+=(const Output& rhs)
+			{
+				pos += rhs.pos;
+				return *this;
+			}
+			Output& operator-=(const Output& rhs)
+			{
+				pos -= rhs.pos;
+				return *this;
+			}
+			Output& operator*=(float rhs)
+			{
+				pos *= rhs;
+				return *this;
+			}
+			Output& operator/=(float rhs)
+			{
+				pos /= rhs;
+				return *this;
+			}
+			Output operator+(const Output& rhs) const
+			{
+				return Output(*this) += rhs;
+			}
+			Output operator-(const Output& rhs) const
+			{
+				return Output(*this) -= rhs;
+			}
+			Output operator*(float rhs) const
+			{
+				return Output(*this) *= rhs;
+			}
+			Output operator/(float rhs) const
+			{
+				return Output(*this) /= rhs;
+			}
+		public:
+			Vec4 pos;
+			Color c;
+		};
+
+	public:
+		void BindWorld(const Mat4& world_in)
+		{
+			world = world_in;
+			worldProj = world * proj;
+		}
+		void BindProjection(const Mat4& proj_in)
+		{
+			proj = proj_in;
+			worldProj = world * proj;
+		}
+		auto GetProjection() const
+		{
+			return proj;
+		}
+
+		Output operator()(const Vertex& in)
+		{
+			return { Vec4(in.pos) * worldProj, in.color };
+		}
+
+	private:
+		Mat4 world = Mat4::Identity();
+		Mat4 proj = Mat4::Identity();
+		Mat4 worldProj = Mat4::Identity();
+	};
+
 	// default required by the pipeline, does nothing
 	typedef DefaultGeometryShader<VertexShader::Output> GeometryShader;
 

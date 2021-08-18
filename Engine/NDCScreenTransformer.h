@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Graphics.h"
-#include "Vec3.h"
+#include "Vec4.h"
 
-class CoordinateTransformer
+class NDCScreenTransformer
 {
 public:
-	CoordinateTransformer()
+	NDCScreenTransformer()
 		:
 		xFactor( Graphics::ScreenWidth / 2 - 1 ),
 		yFactor( Graphics::ScreenHeight / 2 - 1 )
@@ -16,13 +16,14 @@ public:
 	template <typename Vertex>
 	Vertex& Transform( Vertex& v ) const
 	{
-		const float zInv = 1.0f / v.pos.z;
+		const float wInv = 1.0f / v.pos.w;
 
-		v *= zInv;
+		v *= wInv;
+
 		v.pos.x = ( v.pos.x + 1.0f ) * xFactor;
 		v.pos.y = ( -v.pos.y + 1.0f ) * yFactor;
 
-		v.pos.z = zInv;
+		v.pos.w = wInv;
 
 		return v;
 	}

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "CoordinateTransformer.h"
 #include "Mat.h"
 #include "Cube.h"
 

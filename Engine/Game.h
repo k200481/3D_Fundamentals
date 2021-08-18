@@ -21,7 +21,6 @@
 #pragma once
 
 #include "Graphics.h"
-#include "CoordinateTransformer.h"
 #include "Scene.h"
 
 class Game

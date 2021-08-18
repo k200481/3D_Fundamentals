@@ -53,16 +53,24 @@ public:
 	virtual void Render() override
 	{
 		pipeline.BeginScene();
-		liPipeline.BeginScene();
 
-		const Mat4 trans = Mat4::RotationX(theta_x) * Mat4::RotationY(theta_y) * Mat4::RotationZ(theta_z) * Mat4::Translation(0.0f,0.0f,zOffset);
+		const auto proj = Mat4::Projection(2.0f, 2.0f, 1.0f, 10.0f);
 
-		pipeline.effect.vs.BindTransformation(trans);
+		pipeline.effect.vs.BindWorld(
+			Mat4::RotationX(theta_x) * 
+			Mat4::RotationY(theta_y) * 
+			Mat4::RotationZ(theta_z) * 
+			Mat4::Translation(0.0f, 0.0f, zOffset)
+		);
+		pipeline.effect.vs.BindProjection(proj);
 		pipeline.effect.ps.SetLightPosition(lightPos);
-		pipeline.Draw(itlist);
 
-		liPipeline.effect.vs.BindRotation(Mat3::Identity());
-		liPipeline.effect.vs.BindTranslation(lightPos);
+		liPipeline.effect.vs.BindWorld(
+			Mat4::Translation(lightPos.x, lightPos.y, lightPos.z)
+		);
+		liPipeline.effect.vs.BindProjection(proj);
+
+		pipeline.Draw(itlist);
 		liPipeline.Draw(li_itlist);
 	}
 
