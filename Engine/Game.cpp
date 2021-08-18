@@ -36,6 +36,7 @@
 //#include "GouraudPointScene.h"
 //#include "PhongPointScene.h"
 #include "SpecularPhongScene.h"
+#include "Cube.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -60,6 +61,7 @@ Game::Game( MainWindow& wnd )
 	scenes.emplace_back( std::make_unique<PhongPointScene>( gfx, Plane::GetNormals<PhongPointEffect::Vertex>(  ) ) );*/
 	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, Sphere::GetNormals<SpecularPhongEffect::Vertex>(1.0f, 40, 40) ) );
 	scenes.emplace_back( std::make_unique<SpecularPhongScene>( gfx, IndexedTriangleList<SpecularPhongEffect::Vertex>::LoadNormals("suzanne.obj") ) );
+	scenes.emplace_back( std::make_unique<SpecularPhongScene>(gfx, Cube::GetPlainIndependentFacesNormals<SpecularPhongEffect::Vertex>()) );
 
 	i = scenes.begin();
 }

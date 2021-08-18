@@ -24,7 +24,7 @@ public:
 		li_itlist(Sphere::GetPlain<LiVertex>(0.05f, 30, 30))
 	{
 		itlist.AdjustToTrueCenter();
-		zOffset = itlist.GetRadius() * 1.6f;
+		zOffset = itlist.GetRadius() * 2.0f;
 
 		for (auto& v : li_itlist.vertices)
 		{
@@ -54,8 +54,10 @@ public:
 	{
 		pipeline.BeginScene();
 
-		const auto proj = Mat4::Projection(4.0f, 3.0f, 1.0f, 10.0f);
+		//const auto proj = Mat4::Projection(4.0f, 3.0f, 1.0f, 10.0f);
+		const auto proj = Mat4::ProjectionHFOV(100.0f, 1.33333f, 1.0f, 10.0f);
 
+		// bind object transformations
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX(theta_x) * 
 			Mat4::RotationY(theta_y) * 
@@ -63,13 +65,16 @@ public:
 			Mat4::Translation(0.0f, 0.0f, zOffset)
 		);
 		pipeline.effect.vs.BindProjection(proj);
+		// set light source position
 		pipeline.effect.ps.SetLightPosition(lightPos);
 
+		// bind light transformations
 		liPipeline.effect.vs.BindWorld(
 			Mat4::Translation(lightPos.x, lightPos.y, lightPos.z)
 		);
 		liPipeline.effect.vs.BindProjection(proj);
 
+		// draw
 		pipeline.Draw(itlist);
 		liPipeline.Draw(li_itlist);
 	}
