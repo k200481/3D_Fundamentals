@@ -155,26 +155,38 @@ public:
 		{
 			world = world_in;
 			worldProj = world * proj;
+			worldView = world * view;
+			worldViewProj = worldView * proj;
 		}
 		void BindProjection(const Mat4& proj_in)
 		{
 			proj = proj_in;
 			worldProj = world * proj;
+			worldViewProj = worldView * proj;
 		}
 		auto GetProjection() const
 		{
 			return proj;
 		}
+		void BindView(const Mat4& view_in)
+		{
+			view = view_in;
+			worldView = world * view;
+			worldViewProj = worldView * proj;
+		}
 
 		Output operator()(const Vertex& in)
 		{
-			return { Vec4(in.pos) * worldProj, in.color };
+			return { Vec4(in.pos) * worldViewProj, in.color };
 		}
 
 	private:
 		Mat4 world = Mat4::Identity();
 		Mat4 proj = Mat4::Identity();
+		Mat4 view = Mat4::Identity();
 		Mat4 worldProj = Mat4::Identity();
+		Mat4 worldView = Mat4::Identity();
+		Mat4 worldViewProj = Mat4::Identity();
 	};
 
 	// default required by the pipeline, does nothing

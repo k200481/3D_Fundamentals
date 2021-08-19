@@ -85,7 +85,7 @@ void Game::UpdateModel()
 void Game::CycleScenes()
 {
 	Mouse::Event e;
-	while ( ( e = wnd.mouse.Read() ).GetType() != Mouse::Event::Type::Invalid )
+	while ( wnd.kbd.KeyIsPressed(VK_TAB) && ( e = wnd.mouse.Read() ).GetType() != Mouse::Event::Type::Invalid )
 	{
 		if ( e.GetType() == Mouse::Event::LPress )
 		{

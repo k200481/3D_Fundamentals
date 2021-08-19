@@ -44,3 +44,9 @@ inline T interpolate( T src, T dst, float alpha )
 {
 	return { src + (dst - src) * alpha };
 }
+
+template <typename T>
+constexpr inline auto to_rad(T degree)
+{
+	return degree * (T)PI_D / 180.0f;
+}

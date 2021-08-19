@@ -6,6 +6,7 @@
 #include "SpecularPhongEffect.h"
 #include "SolidColorEffect.h"
 #include "Sphere.h"
+#include "MouseTracker.h"
 
 class SpecularPhongScene : public CubeScene
 {
@@ -24,29 +25,66 @@ public:
 		li_itlist(Sphere::GetPlain<LiVertex>(0.05f, 30, 30))
 	{
 		itlist.AdjustToTrueCenter();
-		zOffset = itlist.GetRadius() * 2.0f;
-
+		// fill in the colors of the light source
 		for (auto& v : li_itlist.vertices)
 		{
 			v.color = Colors::White;
 		}
+
+		const auto proj = Mat4::ProjectionHFOV(hfov, aspectRatio, 0.5f, 4.0f);
+		pipeline.effect.vs.BindProjection(proj);
+		liPipeline.effect.vs.BindProjection(proj);
 	}
 
 	virtual void UpdateScene(Mouse& mouse, const Keyboard& kbd, float dt) override
 	{
-		CubeScene::UpdateScene(mouse, kbd, dt);
-
-		const Vec2 mouseScreenPos = Vec2(mouse.GetPos());
-		lightPos.x = mouseScreenPos.x / (Graphics::ScreenWidth / 2) - 1.0f;
-		lightPos.y = -mouseScreenPos.y / (Graphics::ScreenHeight / 2) + 1.0f;
-
-		if (kbd.KeyIsPressed(VK_NUMPAD8))
+		// adjust position
+		if (kbd.KeyIsPressed('W'))
 		{
-			lightPos.z += 0.1f;
+			camPos += Vec4({ 0.0f,0.0f,1.0f }) * !camInvRot * dt;
 		}
-		else if (kbd.KeyIsPressed(VK_NUMPAD2))
+		else if (kbd.KeyIsPressed('S'))
 		{
-			lightPos.z -= 0.1f;
+			camPos -= Vec4({ 0.0f,0.0f,1.0f }) * !camInvRot * dt;
+		}
+		if (kbd.KeyIsPressed('D'))
+		{
+			camPos += Vec4({ 1.0f,0.0f,0.0f }) * !camInvRot * dt;
+		}
+		else if (kbd.KeyIsPressed('A'))
+		{
+			camPos -= Vec4({ 1.0f,0.0f,0.0f }) * !camInvRot * dt;
+		}
+		if (kbd.KeyIsPressed(VK_SPACE))
+		{
+			camPos += Vec4({ 0.0f,1.0f,0.0f }) * !camInvRot * dt;
+		}
+		else if (kbd.KeyIsPressed('C'))
+		{
+			camPos -= Vec4({ 0.0f,1.0f,0.0f }) * !camInvRot * dt;
+		}
+
+		
+		Mouse::Event e;
+		while ( (e = mouse.Read()).GetType() != Mouse::Event::Invalid )
+		{
+			switch (e.GetType())
+			{
+			case Mouse::Event::LPress:
+				mt.Engage(e.GetPos());
+				break;
+			case Mouse::Event::LRelease:
+				mt.Disengage();
+				break;
+			case Mouse::Event::Move:
+				if (mt.IsEngaged()) {
+					const auto delta = mt.Move(e.GetPos());
+					camInvRot = camInvRot
+						* Mat4::RotationY(-delta.x * hTrack)
+						* Mat4::RotationX(-delta.y * vTrack);
+				}
+				break;
+			}
 		}
 	}
 
@@ -54,25 +92,24 @@ public:
 	{
 		pipeline.BeginScene();
 
-		//const auto proj = Mat4::Projection(4.0f, 3.0f, 1.0f, 10.0f);
-		const auto proj = Mat4::ProjectionHFOV(100.0f, 1.33333f, 0.5f, 4.0f);
+		const auto camInvTrans = Mat4::Translation(-camPos);
+		const auto camInv = camInvTrans * camInvRot;
 
-		// bind object transformations
+		// bind world transformations
 		pipeline.effect.vs.BindWorld(
 			Mat4::RotationX(theta_x) * 
 			Mat4::RotationY(theta_y) * 
 			Mat4::RotationZ(theta_z) * 
-			Mat4::Translation(0.0f, 0.0f, zOffset)
+			Mat4::Translation(pos)
 		);
-		pipeline.effect.vs.BindProjection(proj);
-		// set light source position
-		pipeline.effect.ps.SetLightPosition(lightPos);
-
-		// bind light transformations
 		liPipeline.effect.vs.BindWorld(
-			Mat4::Translation(lightPos.x, lightPos.y, lightPos.z)
+			Mat4::Translation(lightPos)
 		);
-		liPipeline.effect.vs.BindProjection(proj);
+		// bind camera transformations
+		pipeline.effect.vs.BindView(camInv);
+
+		// update light source position in the world
+		pipeline.effect.ps.SetLightPosition(lightPos);
 
 		// draw
 		pipeline.Draw(itlist);
@@ -88,5 +125,21 @@ private:
 	IndexedTriangleList<Vertex> itlist;
 	IndexedTriangleList<LiVertex> li_itlist;
 
-	Vec3 lightPos = { 0.0f, 0.0f, 1.0f };
+	MouseTracker mt;
+
+	Vec3 pos = { 0.0f, 0.0f, 2.0f };
+	Vec4 lightPos = { 0.5f,-0.5f,0.55f };
+	Vec4 camPos = { 0.0f, 0.0f, 0.0f };
+	Mat4 camInvRot = Mat4::Identity();
+
+	float camThetaY = 0.0f;
+	float camThetaX = 0.0f;
+
+	static constexpr float camSpeed = 1.0f;
+	static constexpr float hfov = 100.0f;
+	static constexpr float aspectRatio = 1.33333f;
+	static constexpr float vfov = hfov * aspectRatio;
+
+	static constexpr float hTrack = to_rad(hfov) / (float)Graphics::ScreenWidth;
+	static constexpr float vTrack = to_rad(vfov) / (float)Graphics::ScreenHeight;
 };

@@ -169,6 +169,22 @@ public:
 			};
 		}
 	}
+	static _Mat Translation(const Vec3& t)
+	{
+		if constexpr (S != 4)
+		{
+			static_assert(false, "Bad Matrix Size");
+		}
+		else
+		{
+			return {
+				(T)1.0,(T)0.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)1.0,(T)0.0,(T)0.0,
+				(T)0.0,(T)0.0,(T)1.0,(T)0.0,
+				(T)t.x,(T)t.y,(T)t.z,(T)1.0
+			};
+		}
+	}
 	
 	static _Mat Scaling(T factor)
 	{
@@ -232,7 +248,19 @@ public:
 			static_assert(false, "Bad Matrix Size");
 		}
 	}
-
+	// returns inverse of orthogonal matrix
+	_Mat operator!() const
+	{
+		Mat4 inv;
+		for (size_t i = 0; i < S; i++)
+		{
+			for (size_t j = 0; j < S; j++)
+			{
+				inv.elements[i][j] = elements[j][i];
+			}
+		}
+		return inv;
+	}
 public:
 	// [ row ][ col ]
 	T elements[S][S];
