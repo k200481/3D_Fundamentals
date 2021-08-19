@@ -77,7 +77,109 @@ private:
 	// creates a triangle object
 	void ProcessTriangle(const VSOut& v0, const VSOut& v1, const VSOut& v2, size_t triangle_id)
 	{
-		PostProcessTriangleVertices( effect.gs( v0, v1, v2, triangle_id ) );
+		ClipCullTriangle( effect.gs( v0, v1, v2, triangle_id ) );
+	}
+	// 
+	void ClipCullTriangle(Triangle<GSOut>& t)
+	{
+		// cull tests
+		if (t.v0.pos.x > t.v0.pos.w &&
+			t.v1.pos.x > t.v1.pos.w &&
+			t.v2.pos.x > t.v2.pos.w)
+		{
+			return;
+		}
+		if (t.v0.pos.x < -t.v0.pos.w &&
+			t.v1.pos.x < -t.v1.pos.w &&
+			t.v2.pos.x < -t.v2.pos.w)
+		{
+			return;
+		}
+		if (t.v0.pos.y > t.v0.pos.w &&
+			t.v1.pos.y > t.v1.pos.w &&
+			t.v2.pos.y > t.v2.pos.w)
+		{
+			return;
+		}
+		if (t.v0.pos.y < -t.v0.pos.w &&
+			t.v1.pos.y < -t.v1.pos.w &&
+			t.v2.pos.y < -t.v2.pos.w)
+		{
+			return;
+		}
+		if (t.v0.pos.z > t.v0.pos.w &&
+			t.v1.pos.z > t.v1.pos.w &&
+			t.v2.pos.z > t.v2.pos.w)
+		{
+			return;
+		}
+		if (t.v0.pos.z < 0.0f &&
+			t.v1.pos.z < 0.0f &&
+			t.v2.pos.z < 0.0f)
+		{
+			return;
+		}
+
+		// clipping routines
+		// v0 is out behind the near plane
+		const auto Clip1 = [this](const GSOut& v0, const GSOut& v1, const GSOut& v2) 
+		{
+			const float alpha1 = -v0.pos.z / (v1.pos.z - v0.pos.z);
+			const float alpha2 = -v0.pos.z / (v2.pos.z - v0.pos.z);
+
+			const auto v0a = interpolate(v0, v1, alpha1);
+			const auto v0b = interpolate(v0, v2, alpha2);
+
+			PostProcessTriangleVertices(Triangle<GSOut>{v0a, v1, v2});
+			PostProcessTriangleVertices(Triangle<GSOut>{v0a, v2, v0b});
+		};
+		// v1 and v2 are behind the near plane
+		const auto Clip2 = [this](const GSOut& v0, const GSOut& v1, const GSOut& v2)
+		{
+			const float alpha1 = -v1.pos.z / (v0.pos.z - v1.pos.z);
+			const float alpha2 = -v2.pos.z / (v0.pos.z - v2.pos.z);
+
+			const auto v1a = interpolate(v1, v0, alpha1);
+			const auto v2a = interpolate(v2, v0, alpha2);
+
+			PostProcessTriangleVertices(Triangle<GSOut>{v1a, v0, v2a});
+		};
+
+		// near plane clipping
+		if (t.v0.pos.z < 0.0f)
+		{
+			if (t.v1.pos.z < 0.0f)
+			{
+				Clip2(t.v2, t.v0, t.v1);
+			}
+			else if (t.v2.pos.z < 0.0f)
+			{
+				Clip2(t.v1, t.v0, t.v2);
+			}
+			else
+			{
+				Clip1(t.v0, t.v1, t.v2);
+			}
+		}
+		else if (t.v1.pos.z < 0.0f)
+		{
+			if (t.v2.pos.z < 0.0f)
+			{
+				Clip2(t.v0, t.v1, t.v2);
+			}
+			else
+			{
+				Clip1(t.v1, t.v0, t.v2);
+			}
+		}
+		else if(t.v2.pos.z < 0.0f)
+		{
+			Clip1(t.v2, t.v1, t.v0);
+		}
+		else
+		{
+			PostProcessTriangleVertices(t);
+		}
 	}
 	// transforms triangle's vertices to perspective/screen space
 	void PostProcessTriangleVertices(Triangle<GSOut>& triangle)
@@ -170,8 +272,8 @@ private:
 	// draws a flat triangle, handles the parts in common in both flat top and flat bottom triangles
 	void DrawFlatTriangle(const GSOut& it0, const GSOut& it1, const GSOut& it2, const GSOut& dv0, const GSOut& dv1, GSOut itEdge1)
 	{
-		const int yStart = (int)std::ceil( it0.pos.y - 0.5f );
-		const int yEnd = (int)std::ceil( it2.pos.y - 0.5f );
+		const int yStart = std::max( (int)std::ceil( it0.pos.y - 0.5f ), 0);
+		const int yEnd = std::min( (int)std::ceil( it2.pos.y - 0.5f ), (int)Graphics::ScreenHeight - 1);
 
 		// left edge, alwas v0
 		auto itEdge0 = it0;
@@ -183,8 +285,8 @@ private:
 		// loop
 		for ( int y = yStart; y < yEnd; y++, itEdge0 += dv0, itEdge1 += dv1 )
 		{
-			const int xStart = (int)std::ceil(itEdge0.pos.x - 0.5f);
-			const int xEnd = (int)std::ceil(itEdge1.pos.x - 0.5f);
+			const int xStart = std::max( (int)std::ceil(itEdge0.pos.x - 0.5f), 0);
+			const int xEnd = std::min( (int)std::ceil(itEdge1.pos.x - 0.5f), (int)Graphics::ScreenWidth - 1);
 
 			// the coordinate in perspective space to be drawn
 			GSOut tc = itEdge0;

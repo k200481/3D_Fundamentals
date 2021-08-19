@@ -55,7 +55,7 @@ public:
 		pipeline.BeginScene();
 
 		//const auto proj = Mat4::Projection(4.0f, 3.0f, 1.0f, 10.0f);
-		const auto proj = Mat4::ProjectionHFOV(100.0f, 1.33333f, 1.0f, 10.0f);
+		const auto proj = Mat4::ProjectionHFOV(100.0f, 1.33333f, 0.5f, 4.0f);
 
 		// bind object transformations
 		pipeline.effect.vs.BindWorld(
